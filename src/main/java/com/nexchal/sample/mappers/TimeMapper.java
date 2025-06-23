@@ -1,4 +1,4 @@
-package com.nexchal.mappers;
+package com.nexchal.sample.mappers;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

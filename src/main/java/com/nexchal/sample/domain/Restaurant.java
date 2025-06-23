@@ -1,4 +1,4 @@
-package com.nexchal.sample;
+package com.nexchal.sample.domain;
 
 import org.springframework.stereotype.Component;
 
