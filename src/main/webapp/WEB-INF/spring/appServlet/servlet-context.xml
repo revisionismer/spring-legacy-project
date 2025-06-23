@@ -9,19 +9,27 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
-	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
-
+	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	
+	<!-- WEB과 관련된 설정은 servlet-context.xml에서 처리 -->
+	
+	<!-- 4-1. 컨트롤러 등록(component-scan) : Spring이 관리하는 Bean으로 등록  -->
+	<context:component-scan base-package="com.nexchal.sample" />
+	
+	<!-- 4-2. 컨트롤러 등록(component-scan) : Spring이 관리하는 Bean으로 등록  -->
+	<context:component-scan base-package="com.nexchal.board.web" />
+	
+	<!-- 4-3. MVC : Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+	
+	<!-- 4-4. 뷰 리졸버 설정 : Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
-	<context:component-scan base-package="com.nexchal.*" />
 	
 	
 	

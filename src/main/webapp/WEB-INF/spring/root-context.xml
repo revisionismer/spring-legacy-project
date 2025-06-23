@@ -9,10 +9,7 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
-	<!-- 2-1. component-scan : @Component 어노테이션이 붙은 클래스를 scan하여 Spring이 관리하는 Bean으로 등록  -->
-	<context:component-scan base-package="com.nexchal.sample"></context:component-scan>
-	
-	<!-- 2-2. hikariCP 데이터베이스 설정 : hikariConfig -->
+	<!-- 2-1. hikariCP 데이터베이스 설정 : hikariConfig -->
 	<bean name="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="org.mariadb.jdbc.Driver" />
 		<property name="jdbcUrl" value="jdbc:mariadb://localhost:3306/nexchal" />
@@ -22,7 +19,7 @@
 		<!-- <property name="minimumIdle" value="2" />  -->
 	</bean>
 	
-	<!-- 2-3. hikariCP 데이터베이스 설정 : DataSource -->
+	<!-- 2-2. hikariCP 데이터베이스 설정 : DataSource -->
 	<bean name="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<!-- 2-4. 2-2에서 만든 hikariConfig 정보를 hikariDataSource 생성자에 등록 -->
 		<constructor-arg ref="hikariConfig" />
@@ -36,5 +33,5 @@
 	</bean>
 	
 	<!-- 3-2. mybatis-spring scan 설정 -->
-	<mybatis-spring:scan base-package="com.nexchal.mappers"/>
+	<mybatis-spring:scan base-package="com.nexchal.sample.mappers"/>
 </beans>
