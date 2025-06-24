@@ -8,12 +8,7 @@
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
-	
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-	<resources mapping="/resources/**" location="/resources/" />
 
-	
 	<!-- WEB과 관련된 설정은 servlet-context.xml에서 처리 -->
 	
 	<!-- 4-1. 컨트롤러 등록(component-scan) : Spring이 관리하는 Bean으로 등록  -->
@@ -31,6 +26,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	
+	<!-- 4-5. 정적 리소스 처리 :  Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
 	
 </beans:beans>

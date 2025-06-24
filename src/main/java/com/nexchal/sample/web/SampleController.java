@@ -3,9 +3,12 @@ package com.nexchal.sample.web;
 import java.util.Arrays;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nexchal.sample.web.dto.SampleDTO;
 import com.nexchal.sample.web.dto.SampleDTOList;
@@ -22,43 +25,69 @@ public class SampleController {
 	public String basic() {
 		log.info("basic------------------------");
 		
-		return "basic";
+		return "/sample/basic";
 	}
 	
-	@GetMapping("/ex1")
-	public void ex1(@RequestParam("name") String name,
-					@RequestParam(value="age",
-								  required = false,
-								  defaultValue = "10") int age) {
+	@GetMapping("/ex01")
+	public String ex1(@RequestParam("name") String name,
+					  @RequestParam(
+							  value="age",
+							  required = false,
+							  defaultValue = "10") int age) {  // defaultValue가 숫자가 아니면 익셉션동작.
 		
-		log.info("ex1---------------------------");
+		log.info("ex01---------------------------");
 		log.info(name);
 		log.info(age);
 		
+		return "/sample/ex01";
+		
 	}
 	
-	@GetMapping("/ex2")
+	@GetMapping("/ex02")
 	public void ex2(SampleDTO dto) {
 		log.info("ex2---------------------------");
 		log.info(dto);
 	}
 	
-	@GetMapping("/ex3")
-	public void ex03(String[] ids) {
-		log.info("ex3---------------------------");
+	@GetMapping("/ex03")
+	public String ex03(String[] ids) {
+		log.info("ex03---------------------------");
 		log.info(Arrays.deepToString(ids));
+		return "/sample/ex3";
 	}
 	
 	// Tip : Array를 파라미터로 넘길 때 : http://localhost:8080/sample/ex04?list%5B0%5D.name=A&list%5B0%5D.age=10&list%5B1%5D.name=B&list%5B1%5D.age=20
 	@GetMapping("/ex04")
 	public void ex04(SampleDTOList list) {
-		log.info("ex4---------------------------");
+		log.info("ex04---------------------------");
 		log.info(list);
 	}
 	
 	@GetMapping("/ex05")
 	public void ex05(SampleTodoDTO dto) {
-		log.info("ex5---------------------------");
+		log.info("ex05---------------------------");
 		log.info(dto);
+	}
+	
+	@GetMapping("/ex06")
+	public String ex06(@ModelAttribute("dto") SampleDTO dto,
+					 @ModelAttribute("page") int page, 
+					 Model model) {
+		
+		model.addAttribute("list", new String[] {"AAA", "BBB", "CCC"});
+		
+		return "/sample/ex04";
+		
+	}
+	
+	@GetMapping("/ex07")
+	public String ex07(RedirectAttributes rttr) {
+		
+		rttr.addAttribute("v1", "ABC");
+		rttr.addAttribute("v2", "DFG");
+		
+		rttr.addFlashAttribute("core", "ABCDE");
+		
+		return "redirect:/sample/basic";
 	}
 }
