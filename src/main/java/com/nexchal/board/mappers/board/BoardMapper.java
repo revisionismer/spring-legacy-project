@@ -10,4 +10,10 @@ import com.nexchal.board.domain.BoardVO;
 public interface BoardMapper {
 
 	List<BoardVO> getAllList();
+	
+	int insert(BoardVO boardVO);
+	
+	BoardVO select(Long bno);
+	
+	int update(BoardVO boardVO);
 }
