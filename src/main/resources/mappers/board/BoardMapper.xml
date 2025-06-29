@@ -12,5 +12,42 @@
 			TB_BOARD
 		
 	</select>
+	
+	<insert id="insert">
+		<selectKey order="AFTER" keyProperty="bno" resultType="long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	
+		INSERT INTO TB_BOARD(
+			title, 
+			content, 
+			writer
+		)
+		VALUES(
+			#{title}, 
+			#{content}, 
+			#{writer}
+		)
+	</insert>
+	
+	<select id="select" parameterType="long" resultType="BoardVO">
+		SELECT
+			*
+		FROM 
+			TB_BOARD
+		WHERE
+			bno = #{bno}
+	</select>
+	
+	<update id="update">
+		UPDATE
+			TB_BOARD
+		SET
+			title = #{title},
+			content = #{content},
+			updateDate = now()
+		WHERE
+			bno = #{bno}	
+	</update>
 
 </mapper>

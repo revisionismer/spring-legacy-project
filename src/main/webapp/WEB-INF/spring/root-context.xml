@@ -37,4 +37,7 @@
 	
 	<!-- 3-3. mybatis-spring scan 설정 2 -->
 	<mybatis-spring:scan base-package="com.nexchal.board.mappers"/>
+	
+	<!-- 3-4. component-scan 설정 1(주의: @Service는 @Component의 일종이므로 component-scan으로 등록해줘야 한다.) -->
+	<context:component-scan base-package="com.nexchal.board.service"/>
 </beans>
