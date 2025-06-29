@@ -15,3 +15,4 @@ logs/file
 # Maven
 log/
 target/
+/.metadata/
