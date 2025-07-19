@@ -48,6 +48,10 @@
 
 </div>
 <!-- /.container-fluid -->
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 
 <!-- bootstrap : modal -->
 <div id="myModal" class="modal" tabindex="-1" role="dialog">
@@ -84,7 +88,10 @@
 	if(result) {
 		myModal.show();
 	}
+
 </script>
+
+<%@include file="../includes/footer.jsp" %>
 
 <!-- 내가 만든 자바스크립트 파일 위치할 곳 -->
 <%@include file="../includes/end.jsp" %>
