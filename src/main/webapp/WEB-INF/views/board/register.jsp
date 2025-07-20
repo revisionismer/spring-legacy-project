@@ -52,8 +52,7 @@
 <%@include file="../includes/footer.jsp"%>
 
 <script type="text/javascript">
-	const name = "AAA";
-	console.log(jQuery);
+
 </script>
 
 <!-- 내가 만든 자바스크립트 파일 위치할 곳 -->

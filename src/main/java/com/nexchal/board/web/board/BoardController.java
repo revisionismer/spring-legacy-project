@@ -37,7 +37,7 @@ public class BoardController {
 	}
 	
 	// 1-2. readBoardOne
-	@GetMapping("/read/{bno}")
+	// @GetMapping("/read/{bno}")
 	public String getBoardOne(@PathVariable(name = "bno") Long bno, Model model) {
 		log.info("------------boardOne----------");
 		
@@ -51,7 +51,7 @@ public class BoardController {
 	}
 	
 	// 1-3. modify
-	@GetMapping("/modify/{bno}")
+	// @GetMapping("/modify/{bno}")
 	public String modifyBoardOne(@PathVariable(name = "bno") Long bno, Model model) {
 		log.info("------------boardOne----------");
 		
@@ -83,5 +83,27 @@ public class BoardController {
 		rttr.addFlashAttribute("result", bno);
 		
 		return "redirect:/board/list";
+	}
+	
+	// 1-6. read와 modify 페이지 컨트롤러 합치기
+	@GetMapping("/{job}/{bno}")
+	public String readAndUpdate(@PathVariable(name = "job") String job, 
+								@PathVariable(name = "bno") Long bno,
+								Model model) {
+		
+		log.info("job : " + job);
+		log.info("bno : " + bno);
+		
+		if(!( job.equals("read") || job.equals("modify")) ) {
+			throw new RuntimeException("Bad Request job");
+		}
+		
+		BoardVO boardVO = boardService.readBoardOne(bno);
+		
+		log.info("boardVO : " + boardVO);
+		
+		model.addAttribute("board", boardVO);
+		
+		return "/board/" + job;
 	}
 }
