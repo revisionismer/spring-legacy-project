@@ -29,9 +29,9 @@
 							<th>updateDate</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="board_tbody">
 					<c:forEach var="board" items="${list}">
-						<tr>
+						<tr data-bno="${board.bno}">
 							<td><c:out value="${board.bno}"/></td>
 							<td><c:out value="${board.title}"/></td>
 							<td><c:out value="${board.content}"/></td>
@@ -49,8 +49,11 @@
 </div>
 <!-- /.container-fluid -->
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> dev
+=======
 >>>>>>> dev
 
 <!-- bootstrap : modal -->
@@ -89,6 +92,19 @@
 		myModal.show();
 	}
 
+	document.querySelector('.board_tbody').addEventListener("click", function(e) {
+		
+		const target = e.target.closest("tr");
+		
+		const bno = target.dataset.bno;
+		
+		console.log('bno : ', bno);
+		
+		// ``을 사용할땐 jsp에선 backtick \을 앞에 넣어줘야 동작한다.
+		window.location = `/board/read/\${bno}`;
+		
+	}, false);
+	
 </script>
 
 <%@include file="../includes/footer.jsp" %>
