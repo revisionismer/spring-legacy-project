@@ -31,7 +31,7 @@
 					</thead>
 					<tbody class="board_tbody">
 					<c:forEach var="board" items="${list}">
-						<tr data-bno="${board.bno}">
+						<tr data-bno="${board.bno}" >
 							<td><c:out value="${board.bno}"/></td>
 							<td><c:out value="${board.title}"/></td>
 							<td><c:out value="${board.content}"/></td>
@@ -48,13 +48,6 @@
 
 </div>
 <!-- /.container-fluid -->
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> dev
-=======
->>>>>>> dev
 
 <!-- bootstrap : modal -->
 <div id="myModal" class="modal" tabindex="-1" role="dialog">
@@ -62,8 +55,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title">Modal title</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
@@ -72,7 +64,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary">Save changes</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" id="modalClose" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -103,6 +95,13 @@
 		// ``을 사용할땐 jsp에선 backtick \을 앞에 넣어줘야 동작한다.
 		window.location = `/board/read/\${bno}`;
 		
+	}, false);
+	
+	document.querySelector('#modalClose').addEventListener("click", function(e) {
+		// 모달이 꺼질때 모든 버튼 인풋 셀렉트 텍스트 에어리어의 포커스를 날린다.
+		$('button, input, select, textarea').each(function () {
+            $(this).blur();
+        });
 	}, false);
 	
 </script>

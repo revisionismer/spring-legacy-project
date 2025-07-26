@@ -87,9 +87,9 @@ public class BoardController {
 	
 	// 1-6. read와 modify 페이지 컨트롤러 합치기
 	@GetMapping("/{job}/{bno}")
-	public String readAndUpdate(@PathVariable(name = "job") String job, 
-								@PathVariable(name = "bno") Long bno,
-								Model model) {
+	public String readAndUpdateView(@PathVariable(name = "job") String job, 
+									@PathVariable(name = "bno") Long bno,
+									Model model) {
 		
 		log.info("job : " + job);
 		log.info("bno : " + bno);
@@ -105,5 +105,32 @@ public class BoardController {
 		model.addAttribute("board", boardVO);
 		
 		return "/board/" + job;
+	}
+	
+	@PostMapping("/delete/{bno}")
+	public String deleteBookByBno(@PathVariable(name = "bno") Long bno, RedirectAttributes rttr) {
+		
+		BoardVO boardVO = boardService.readBoardOne(bno);
+		boardVO.setDeleteYn(true);
+		
+		log.info("boardVO : " + boardVO);
+		
+		boardService.updateBoard(boardVO);
+		
+		rttr.addFlashAttribute("result", boardVO.getBno());
+		
+		return "redirect:/board/list";
+	}
+	
+	@PostMapping("/update/{bno}")
+	public String modifyBookByBno(@PathVariable(name = "bno") Long bno) {
+		
+		BoardVO boardVO = boardService.readBoardOne(bno);
+	
+		log.info("boardVO : " + boardVO);
+		
+		boardService.updateBoard(boardVO);
+		
+		return "redirect:/board/read/" + bno;
 	}
 }
