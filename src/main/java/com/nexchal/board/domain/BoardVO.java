@@ -15,6 +15,8 @@ public class BoardVO {
 	
 	private String writer;
 	
+	private boolean deleteYn;
+	
 	private LocalDateTime createDate;
 	
 	private LocalDateTime updateDate;

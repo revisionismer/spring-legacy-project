@@ -10,6 +10,8 @@
 			*
 		FROM
 			TB_BOARD
+		WHERE 
+			deleteYn = FALSE
 		
 	</select>
 	
@@ -21,12 +23,14 @@
 		INSERT INTO TB_BOARD(
 			title, 
 			content, 
-			writer
+			writer,
+			deleteYn
 		)
 		VALUES(
 			#{title}, 
 			#{content}, 
-			#{writer}
+			#{writer},
+			false
 		)
 	</insert>
 	
@@ -45,6 +49,7 @@
 		SET
 			title = #{title},
 			content = #{content},
+			deleteYn = #{deleteYn},
 			updateDate = now()
 		WHERE
 			bno = #{bno}	

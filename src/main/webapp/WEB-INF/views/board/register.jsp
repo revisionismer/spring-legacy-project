@@ -17,8 +17,8 @@
 	<div class="card shadow mb-4">
 		
 		<div class="card-body">
-			<div id="boardWriteForm">
-				<form action="/board/register" method="post">
+			<div class="content">
+				<form id="boardWriteForm" action="/board/register" method="post">
 					<div class="input-group input-group-lg">
 						<div class="input-group-prepend">
 							<span class="input-group-text">Title</span>
