@@ -45,7 +45,20 @@
 						</div>
 						<input type="text" id="writer" name="writer" class="form-control" value='<c:out value="${board.writer}"></c:out>' readonly="readonly" />
 					</div>
-
+					
+					<div class="input-group input-group-lg">
+						<div class="input-group-prepend">
+							<span class="input-group-text">createDate</span>
+						</div>
+						<input type="text" id="createDate" name="createDate" class="form-control" value="<c:out value="${board.createDate}"></c:out>" readonly="readonly" disabled="disabled" />
+					</div>
+					<div class="input-group input-group-lg">
+						<div class="input-group-prepend">
+							<span class="input-group-text">updateDate</span>
+						</div>
+						<input type="text" id="updateDate" name="updateDate" class="form-control" value="<c:out value="${board.updateDate}"></c:out>" readonly="readonly" disabled="disabled" />
+					</div>
+				
 					<div class="mt-3 d-flex justify-content-end">
 						<button type="button" class="btn btn-info mr-2 btnBoardModify">수정하기</button>
 						<button type="button" class="btn btn-danger mr-2 btnBoardDelete">삭제하기</button>
@@ -79,7 +92,7 @@
 		e.stopPropagation();
 		
 	
-		boardForm.action = `/board/modify/${bno}`;
+		boardForm.action = `/board/modify/\${bno}`;
 		boardForm.method = 'post';
 		boardForm.submit();
 		
@@ -90,7 +103,7 @@
 		
 		e.stopPropagation();
 		
-		boardForm.action = `/board/delete/${bno}`;
+		boardForm.action = `/board/delete/\${bno}`;
 		boardForm.method = 'post';
 		boardForm.submit();
 		
