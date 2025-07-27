@@ -122,10 +122,12 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@PostMapping("/update/{bno}")
-	public String modifyBookByBno(@PathVariable(name = "bno") Long bno) {
+	@PostMapping("/modify/{bno}")
+	public String modifyBookByBno(@PathVariable(name = "bno") Long bno, 
+								  BoardVO boardVO,
+								  RedirectAttributes rttr) {
 		
-		BoardVO boardVO = boardService.readBoardOne(bno);
+		boardVO.setBno(bno);
 	
 		log.info("boardVO : " + boardVO);
 		

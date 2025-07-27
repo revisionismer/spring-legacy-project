@@ -18,7 +18,13 @@
 
 		<div class="card-body">
 			<div class="content">
-				<input type="hidden" id="bno" name="bno" value="<c:out value="${board.bno}"></c:out>">
+				<div class="input-group input-group-lg">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Bno</span>
+					</div>
+					<input type="text" id="bno" name="bno" class="form-control" value="<c:out value="${board.bno}"></c:out>" readonly="readonly" disabled="disabled">
+							
+				</div>
 				<div class="input-group input-group-lg">
 					<div class="input-group-prepend">
 						<span class="input-group-text">Title</span>
@@ -42,6 +48,12 @@
 						<span class="input-group-text">createDate</span>
 					</div>
 					<input type="text" id="createDate" name="createDate" class="form-control" value="<c:out value="${board.createDate}"></c:out>" readonly="readonly" />
+				</div>
+				<div class="input-group input-group-lg">
+					<div class="input-group-prepend">
+						<span class="input-group-text">updateDate</span>
+					</div>
+					<input type="text" id="updateDate" name="updateDate" class="form-control" value="<c:out value="${board.updateDate}"></c:out>" readonly="readonly" />
 				</div>
 
 				<div class="mt-3 d-flex justify-content-end">
