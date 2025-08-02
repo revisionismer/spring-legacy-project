@@ -43,6 +43,10 @@
 					</tbody>
 				</table>
 			</div>
+			
+			<div class="d-sm-flex align-items-center justify-content-end">
+				<button id="boardWriteBtn" class="btn btn-primary mr-2">글쓰기</button>
+			</div>
 		</div>
 	</div>
 
@@ -104,6 +108,9 @@
         });
 	}, false);
 	
+	document.querySelector('#boardWriteBtn').addEventListener("click", function(e) {
+		location.href = '/board/register'
+	}, false);
 </script>
 
 <%@include file="../includes/footer.jsp" %>
