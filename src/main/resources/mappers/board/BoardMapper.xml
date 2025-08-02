@@ -15,6 +15,20 @@
 		
 	</select>
 	
+	<select id="getAllListByPaging" resultType="BoardVO" parameterType="Criteria">
+		SELECT
+			*
+		FROM
+			TB_BOARD
+		WHERE 
+			deleteYn = FALSE
+		ORDER BY
+			bno desc
+		LIMIT 
+			#{skip}, #{amount}
+		
+	</select>
+	
 	<insert id="insert">
 		<selectKey order="AFTER" keyProperty="bno" resultType="long">
 			SELECT LAST_INSERT_ID()
