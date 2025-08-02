@@ -1,5 +1,7 @@
 package com.nexchal.mappers.board;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nexchal.board.domain.BoardVO;
+import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.mappers.board.BoardMapper;
 
 import lombok.extern.log4j.Log4j2;
@@ -63,5 +66,16 @@ public class BoardMapperTests {
 		int updateCount = boardMapper.update(findBoard);
 		
 		log.info("update count : " + updateCount);
+	}
+	
+	@Test
+	public void test06() {
+		Criteria criteria = new Criteria();
+		// 1, 10
+		
+		List<BoardVO> list = boardMapper.getAllListByPaging(criteria);
+		
+		list.forEach(boardVO -> log.info(boardVO));
+		
 	}
 }
