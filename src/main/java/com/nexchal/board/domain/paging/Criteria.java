@@ -28,7 +28,7 @@ public class Criteria {
 	
 	public void setAmount(int amount) {
 		
-		if(amount <= 10 || amount > 100) {
+		if(amount < 10 || amount >= 100) {
 			this.amount = 10;
 			return;
 		}
