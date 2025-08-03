@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.nexchal.board.domain.BoardVO;
+import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.mappers.board.BoardMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardVO> readBoardlist() {
 		return boardMapper.getAllList();
+	}
+	
+	@Override
+	public List<BoardVO> readBoardlist(Criteria criteria) {
+		return boardMapper.getAllListByPaging(criteria);
 	}
 
 	@Override
