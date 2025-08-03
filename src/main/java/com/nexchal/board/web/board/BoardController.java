@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nexchal.board.domain.BoardVO;
+import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.service.board.BoardServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -25,11 +27,22 @@ public class BoardController {
 	private final BoardServiceImpl boardService;
 	
 	// 1-1. getAllBoardlist 
-	@GetMapping("/list")
+//	@GetMapping("/list")
 	public void getAllBoardlist(Model model) {
 		log.info("------------list----------");
 		
 		List<BoardVO> result = boardService.readBoardlist();
+		
+		model.addAttribute("list", result);
+		
+		log.info(result);
+	}
+	
+	@GetMapping("/list")
+	public void getAllBoardlist(@ModelAttribute("cri") Criteria criteria, Model model) {
+		log.info("------------list----------");
+		
+		List<BoardVO> result = boardService.readBoardlist(criteria);
 		
 		model.addAttribute("list", result);
 		
