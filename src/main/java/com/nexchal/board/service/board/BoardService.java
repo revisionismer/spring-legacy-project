@@ -18,4 +18,6 @@ public interface BoardService {
 	public boolean updateBoard(BoardVO boardVO);
 	
 	public boolean deleteBoard(Long bno);
+	
+	public int getTotalCount(Criteria criteria);
 }
