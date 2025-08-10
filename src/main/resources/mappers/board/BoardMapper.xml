@@ -68,5 +68,12 @@
 		WHERE
 			bno = #{bno}	
 	</update>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT
+			COUNT(bno)
+		FROM
+			TB_BOARD
+	</select>
 
 </mapper>

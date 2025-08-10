@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nexchal.board.domain.BoardVO;
 import com.nexchal.board.domain.paging.Criteria;
+import com.nexchal.board.domain.paging.Pagination;
 import com.nexchal.board.service.board.BoardServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,10 @@ public class BoardController {
 		List<BoardVO> result = boardService.readBoardlist(criteria);
 		
 		model.addAttribute("list", result);
+		
+		Pagination pagination = new Pagination(criteria, boardService.getTotalCount(criteria));
+		
+		model.addAttribute("pagination", pagination);
 		
 		log.info(result);
 	}
