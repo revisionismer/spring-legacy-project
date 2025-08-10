@@ -70,6 +70,10 @@
 	</div>
 </div>
 <!-- /.container-fluid -->
+<form id="actionForm" method="get">
+	<input type="hidden" name="pageNum" value="${cri.pageNum}"/>
+	<input type="hidden" name="amount" value="${cri.amount}"/>
+</form>
 
 <%@include file="../includes/footer.jsp"%>
 
@@ -77,11 +81,20 @@
 
 	const bno = `${board.bno}`;
 	const boardForm = document.querySelector("#boardForm");
-
+	
+	const actionForm = document.querySelector("#actionForm");
 
 	document.querySelector(".btnBoardList").addEventListener('click', function(e) {
-		window.location.href = "/board/list";
+		// form submit 방지
+		e.preventDefault();
 		
+		// 전파 방지
+		e.stopPropagation();
+		
+//		window.location.href = "/board/list";
+		actionForm.setAttribute("action", "/board/list");
+		actionForm.submit();
+
 	}, false);
 	
 	document.querySelector(".btnBoardModify").addEventListener('click', function(e) {
@@ -99,8 +112,10 @@
 	}, false);
 	
 	document.querySelector(".btnBoardDelete").addEventListener('click', function(e) {
+		// form submit 방지
 		e.preventDefault();
 		
+		// 전파 방지
 		e.stopPropagation();
 		
 		boardForm.action = `/board/delete/\${bno}`;

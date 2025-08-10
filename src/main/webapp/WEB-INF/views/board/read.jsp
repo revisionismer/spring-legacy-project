@@ -63,20 +63,42 @@
 			</div>
 		</div>
 	</div>
-
 </div>
+
+<form id="actionForm" method="get">
+	<input type="hidden" name="pageNum" value="${cri.pageNum}"/>
+	<input type="hidden" name="amount" value="${cri.amount}"/>
+</form>
 <!-- /.container-fluid -->
 <%@include file="../includes/footer.jsp"%>
 
 <script type="text/javascript">
+
+	const actionForm = document.querySelector("#actionForm");
+	const bno = '${board.bno}';
 	
 	document.querySelector(".btnBoardList").addEventListener('click', function(e) {
-		window.location.href = "/board/list";
+		// form submit 방지
+		e.preventDefault();
 		
+		// 전파 방지
+		e.stopPropagation();
+			
+		// window.location.href = "/board/list";
+		actionForm.setAttribute("action", `/board/list`);
+		actionForm.submit();	
 	}, false);
 	
 	document.querySelector(".btnBoardModifyView").addEventListener('click', function(e) {
-		window.location.href = "/board/modify/${board.bno}";
+		// form submit 방지
+		e.preventDefault();
+		
+		// 전파 방지
+		e.stopPropagation();
+		
+//		window.location.href = "/board/modify/${board.bno}";
+		actionForm.setAttribute("action", `/board/modify/\${bno}`);
+		actionForm.submit();
 		
 	}, false);
 	
