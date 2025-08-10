@@ -107,6 +107,7 @@ public class BoardController {
 	@GetMapping("/{job}/{bno}")
 	public String readAndUpdateView(@PathVariable(name = "job") String job, 
 									@PathVariable(name = "bno") Long bno,
+									@ModelAttribute("cri") Criteria criteria,
 									Model model) {
 		
 		log.info("job : " + job);
@@ -126,7 +127,8 @@ public class BoardController {
 	}
 	
 	@PostMapping("/delete/{bno}")
-	public String deleteBookByBno(@PathVariable(name = "bno") Long bno, RedirectAttributes rttr) {
+	public String deleteBookByBno(@PathVariable(name = "bno") Long bno, 
+								  RedirectAttributes rttr) {
 		
 		BoardVO boardVO = boardService.readBoardOne(bno);
 		boardVO.setDeleteYn(true);
