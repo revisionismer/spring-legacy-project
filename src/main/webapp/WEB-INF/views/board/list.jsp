@@ -12,12 +12,18 @@
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 		<h1 class="h3 mb-0 text-gray-800">Board List</h1>
 	</div>
-
+	
 	<!-- DataTables Example -->
 	<div class="card shadow mb-4">
 	
 		<div class="card-body">
 			<div class="table-responsive">
+				
+				<form id="actionForm" method="get">
+					<input type="hidden" name="pageNum" value="${cri.pageNum}" />
+					<input type="hidden" name="amount" value="${cri.amount}" />
+				</form>
+			
 				<table class="table table-bordered" id="dataTable">
 					<thead>
 						<tr>
@@ -42,6 +48,24 @@
 					</c:forEach>
 					</tbody>
 				</table>
+				<div>
+					<!-- 2025-08-09 : 여기까지 -->
+					<ul class="pagination">
+						<c:if test="${pagination.prev}">
+    						<li class="page-item">
+    							<a class="page-link" href="${pagination.startPage - 1}">Previous</a>
+    						</li>
+    					</c:if>
+    					<c:forEach begin="${pagination.startPage}" end="${pagination.endPage + 1}" var="num">
+    						<li class="page-item ${cri.pageNum == num ? 'active' : ''}">
+    							<a class="page-link" href="${num}">${num}</a>
+    						</li>
+						</c:forEach>
+						<c:if test="${pagination.next}">
+    						<li class="page-item"><a class="page-link" href="${pagination.endPage + 1}">Next</a></li>
+  						</c:if>
+  					</ul>
+				</div>
 			</div>
 			
 			<div class="d-sm-flex align-items-center justify-content-end">
@@ -87,19 +111,6 @@
 	if(result) {
 		myModal.show();
 	}
-
-	document.querySelector('.board_tbody').addEventListener("click", function(e) {
-		
-		const target = e.target.closest("tr");
-		
-		const bno = target.dataset.bno;
-		
-		console.log('bno : ', bno);
-		
-		// ``을 사용할땐 jsp에선 backtick \을 앞에 넣어줘야 동작한다.
-		window.location = `/board/read/\${bno}`;
-		
-	}, false);
 	
 	document.querySelector('#modalClose').addEventListener("click", function(e) {
 		// 모달이 꺼질때 모든 버튼 인풋 셀렉트 텍스트 에어리어의 포커스를 날린다.
@@ -108,9 +119,59 @@
         });
 	}, false);
 	
+
 	document.querySelector('#boardWriteBtn').addEventListener("click", function(e) {
-		location.href = '/board/register'
+		window.location.href = '/board/register';
 	}, false);
+	
+	const actionForm = document.querySelector("#actionForm");
+
+	document.querySelector('.board_tbody').addEventListener("click", function(e) {
+		
+		const target = e.target.closest("tr");
+		
+		const bno = target.dataset.bno;
+		
+		const before = document.querySelector('#clonedActionForm');
+		
+		if(before) {
+			before.remove();
+		}
+		
+		const clonedActionForm = actionForm.cloneNode(true);
+		clonedActionForm.setAttribute("action", `/board/read/\${bno}`)
+		clonedActionForm.setAttribute("id", 'clonedActionForm')
+		
+		document.body.appendChild(clonedActionForm);
+		
+		clonedActionForm.submit();
+		
+		// ``을 사용할땐 jsp에선 backtick \을 앞에 넣어줘야 동작한다.
+	//	window.location.href = `/board/read/\${bno}`;
+		
+	}, false);
+	
+	document.querySelector('.pagination').addEventListener("click", function(e) {
+		
+		e.preventDefault();
+		
+		const target = e.target;
+		console.log(target);
+		
+		const targetPage = target.getAttribute("href");
+		
+	//	console.log(targetPage);
+
+	//  참고 : 검색 조건이 들어가야 할땐 아래 방식으론 안된다. 		
+	//	window.location.href = `/board/list?pageNum=\${targetPage}`;
+	
+		actionForm.setAttribute("action", "/board/list");
+		actionForm.querySelector("input[name='pageNum']").value = targetPage;
+		actionForm.submit();
+	
+	}, false);
+	
+	
 </script>
 
 <%@include file="../includes/footer.jsp" %>

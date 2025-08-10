@@ -14,6 +14,8 @@ public interface BoardMapper {
 	
 	List<BoardVO> getAllListByPaging(Criteria criteria);
 	
+	int getTotalCount(Criteria criteria);
+	
 	int insert(BoardVO boardVO);
 	
 	BoardVO select(Long bno);
