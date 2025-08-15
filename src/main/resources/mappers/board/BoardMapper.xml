@@ -4,6 +4,27 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.nexchal.board.mappers.board.BoardMapper">
+
+	<!-- 검색 조건 조각 내기 -->
+	<sql id="search">
+	<!-- 동적 쿼리 만들기 -->
+		<if test="(types != null and keyword != null)">
+			<foreach collection="types" item="type" open=" and ( " separator="OR" close=")">
+				<choose>
+					<!-- "" -> equlas 안됨, '' -> equals 됨 -->
+					<when test='type.equals("T")'>
+						title LIKE concat('%',  #{keyword}, '%')
+					</when>
+					<when test='type.equals("C")'>
+						content LIKE concat('%',  #{keyword}, '%')
+					</when>
+					<when test='type.equals("W")'>
+						writer LIKE concat('%',  #{keyword}, '%')
+					</when>
+				</choose>
+			</foreach>
+		</if>
+	</sql>
 	
 	<select id="getAllList" resultType="BoardVO">
 		SELECT
@@ -21,7 +42,8 @@
 		FROM
 			TB_BOARD
 		WHERE 
-			deleteYn = FALSE
+			deleteYn = FALSE AND bno > 0
+		<include refid="search"></include>
 		ORDER BY
 			bno desc
 		LIMIT 
@@ -74,6 +96,9 @@
 			COUNT(bno)
 		FROM
 			TB_BOARD
+		WHERE 
+			deleteYn = FALSE AND bno > 0
+		<include refid="search"></include>
 	</select>
 
 </mapper>

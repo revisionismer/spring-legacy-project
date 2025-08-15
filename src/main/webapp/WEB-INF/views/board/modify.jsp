@@ -70,7 +70,7 @@
 	</div>
 </div>
 <!-- /.container-fluid -->
-<form id="actionForm" method="get">
+<form id="actionForm" action="/board/list">
 	<input type="hidden" name="pageNum" value="${cri.pageNum}"/>
 	<input type="hidden" name="amount" value="${cri.amount}"/>
 </form>
@@ -92,7 +92,6 @@
 		e.stopPropagation();
 		
 //		window.location.href = "/board/list";
-		actionForm.setAttribute("action", "/board/list");
 		actionForm.submit();
 
 	}, false);
@@ -104,10 +103,11 @@
 		// 전파 방지
 		e.stopPropagation();
 		
-	
-		boardForm.action = `/board/modify/\${bno}`;
-		boardForm.method = 'post';
-		boardForm.submit();
+		if(confirm(`\${bno}번 게시글을 수정하시겠습니까?`)) {
+			boardForm.action = `/board/modify/\${bno}`;
+			boardForm.method = 'post';
+			boardForm.submit();
+		}
 		
 	}, false);
 	
@@ -118,9 +118,11 @@
 		// 전파 방지
 		e.stopPropagation();
 		
-		boardForm.action = `/board/delete/\${bno}`;
-		boardForm.method = 'post';
-		boardForm.submit();
+		if(confirm(`\${bno}번 게시글을 삭제하시겠습니까?`)) {
+			boardForm.action = `/board/delete/\${bno}`;
+			boardForm.method = 'post';
+			boardForm.submit();	
+		}
 		
 	}, false);
 	

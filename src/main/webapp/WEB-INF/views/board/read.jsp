@@ -65,7 +65,7 @@
 	</div>
 </div>
 
-<form id="actionForm" method="get">
+<form id="actionForm" action="/board/list" method="get">
 	<input type="hidden" name="pageNum" value="${cri.pageNum}"/>
 	<input type="hidden" name="amount" value="${cri.amount}"/>
 </form>
@@ -85,7 +85,6 @@
 		e.stopPropagation();
 			
 		// window.location.href = "/board/list";
-		actionForm.setAttribute("action", `/board/list`);
 		actionForm.submit();	
 	}, false);
 	
