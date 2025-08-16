@@ -70,9 +70,19 @@
 	</div>
 </div>
 <!-- /.container-fluid -->
-<form id="actionForm" action="/board/list">
+<form id="actionForm" action="/board/list" method="get">
 	<input type="hidden" name="pageNum" value="${cri.pageNum}"/>
 	<input type="hidden" name="amount" value="${cri.amount}"/>
+
+	<!-- 검색 조건이 null이 아니고 키워드도 null이 아니라면 -->
+	<c:if test="${cri.types != null && cri.keyword != null}">
+		<c:forEach var="type" items="${cri.types}">
+			<input type="hidden" name="types" value="${type}" />
+		</c:forEach>
+						
+		<input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>" />
+	</c:if>
+
 </form>
 
 <%@include file="../includes/footer.jsp"%>
