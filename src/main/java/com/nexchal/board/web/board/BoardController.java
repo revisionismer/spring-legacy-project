@@ -40,8 +40,11 @@ public class BoardController {
 	}
 	
 	@GetMapping("/list")
-	public void getAllBoardlist(@ModelAttribute("cri") Criteria criteria, Model model) {
+	public void getAllBoardlist(
+			@ModelAttribute("cri") Criteria criteria, 
+			Model model) {
 		log.info("------------list----------");
+		log.info("criteria : " + criteria);
 		
 		List<BoardVO> result = boardService.readBoardlist(criteria);
 		
@@ -152,6 +155,8 @@ public class BoardController {
 		log.info("boardVO : " + boardVO);
 		
 		boardService.updateBoard(boardVO);
+		
+		rttr.addFlashAttribute("result", boardVO.getBno());
 		
 		return "redirect:/board/read/" + bno;
 	}

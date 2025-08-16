@@ -17,11 +17,37 @@
 	<div class="card shadow mb-4">
 	
 		<div class="card-body">
+			
+			<!--  -->
+			<div id="search_condition" style="padding-bottom: 10px">
+				<select name="typeSelect">
+				 	<option value="">--</option>
+					<option value="T" ${cri.typeStr == 'T'? 'selected' : ''}>제목</option>
+					<option value="C" ${cri.typeStr == 'C'? 'selected' : ''}>내용</option>
+					<option value="W" ${cri.typeStr == 'W'? 'selected' : ''}>작성자</option>
+					<option value="TC" ${cri.typeStr == 'TC'? 'selected' : ''}>제목 OR 내용</option>
+					<option value="TW" ${cri.typeStr == 'TW'? 'selected' : ''}>제목 OR 작성자</option>
+					<option value="TCW" ${cri.typeStr == 'TCW'? 'selected' : ''}>제목 OR 내용 OR 작성자</option>
+				</select>
+				<input type="text" name="keywordInput" value="${cri.keyword}" />
+				<button class="btn-default searchBtn">검색</button>
+			</div>
+			
 			<div class="table-responsive">
 				
-				<form id="actionForm" method="get">
+				<form id="actionForm" action="/board/list" method="get">
 					<input type="hidden" name="pageNum" value="${cri.pageNum}" />
 					<input type="hidden" name="amount" value="${cri.amount}" />
+					
+					<!-- 검색 조건이 null이 아니고 키워드도 null이 아니라면 -->
+					<c:if test="${cri.types != null && cri.keyword != null}">
+						<c:forEach var="type" items="${cri.types}">
+							<input type="hidden" name="types" value="${type}" />
+						</c:forEach>
+						
+						<input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>" />
+					</c:if>
+				
 				</form>
 			
 				<table class="table table-bordered" id="dataTable">
@@ -170,6 +196,49 @@
 		actionForm.submit();
 	
 	}, false);
+	
+	
+	document.querySelector(".searchBtn").addEventListener("click", function(e) {
+		// form submit 방지
+		e.preventDefault();
+		
+		// 전파 방지
+		e.stopPropagation();
+		
+		const selectObj = document.querySelector("select[name='typeSelect']");
+		
+		const selectValue = selectObj.options[selectObj.selectedIndex].value;
+		
+		console.log("selectValue :" + selectValue);
+		// 1-1. 검색 조건을 배열로 만든다.(T, TC, TW, TCW -> [T], [T, C], [T, W], [T, C, W])
+		const arr = selectValue.split("");
+		
+		console.log(arr);
+		
+		// 1-2. pageNum과 amount도 새로 만들어 준다.(검색된 pageNum은 1)
+		let str = '';
+		
+		str = `<input type='hidden' name='pageNum' value=1>`;
+		str += `<input type='hidden' name='amount' value=${cri.amount}>`;
+
+		// 1-3. 위에서 만든 검색조건 배열을 types= 형태로 만들어주기
+		if(arr && arr.length > 0) { // 1-4. 검색 조건이 있다면
+			for(const type of arr) { // 1-5. arr 배열에 있는 값을 type에 넣어주기
+				str += `<input type='hidden' name='types' value=\${type}>`;
+			} 
+		}
+		
+		// 1-6. 키워드 값도 넣어주기
+		const keywordValue = document.querySelector("input[name='keywordInput']").value;
+		str += `<input type='hidden' name='keyword' value=\${keywordValue}>`
+
+		actionForm.innerHTML = str;
+
+		console.log(str);
+		
+		actionForm.submit();
+		
+	})
 	
 	
 </script>
