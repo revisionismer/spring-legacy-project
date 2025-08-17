@@ -184,6 +184,11 @@
 		const target = e.target;
 		console.log(target);
 		
+		// 2025-08-17 : page-link 이외의 영역 클릭시에는 이동하지 않는다.
+		if(target.className != 'page-link') {
+			return false;
+		}
+		
 		const targetPage = target.getAttribute("href");
 		
 	//	console.log(targetPage);
