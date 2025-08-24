@@ -34,6 +34,7 @@ public class ReplyVO {
  * CREATE TABLE tb_reply(
 	rno INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	bno INT(11) NOT NULL,
+	title VARCHAR(500) NOT NULL COLLATE 'utf8_general_ci',
 	content VARCHAR(2000) NOT NULL COLLATE 'utf8_general_ci',
 	writer VARCHAR(100) NOT NULL COLLATE 'utf8_general_ci',
 	createDate TIMESTAMP NOT NULL DEFAULT current_timestamp(),
@@ -41,5 +42,7 @@ public class ReplyVO {
 	deleteYn TINYINT(4) NULL DEFAULT NULL,
 	CONSTRAINT fk_reply_board FOREIGN KEY(bno) REFERENCES tb_board(bno)
 ) 
+
+CREATE INDEX idx_reply ON tb_reply(bno DESC, rno asc);
  * 
  */
