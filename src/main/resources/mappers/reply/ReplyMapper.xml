@@ -27,4 +27,25 @@
 		
 	</insert>
 	
+	<select id="findReplyOne" parameterType="Long" resultType="ReplyVO">
+		SELECT
+			*
+		FROM
+			tb_reply
+		WHERE
+			rno = #{rno}
+	</select>
+	
+	<update id="updateReply" parameterType="ReplyVO">
+		UPDATE
+			TB_REPLY
+		SET
+			title = #{title},
+			content = #{content},
+			deleteYn = #{deleteYn},
+			updateDate = now()
+		WHERE
+			rno = #{rno}
+	</update>
+	
 </mapper>
