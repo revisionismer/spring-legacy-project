@@ -34,4 +34,29 @@ public class ReplyMapperTests {
 			log.info(replyMapper.insertReply(replyVO));
 		}
 	}
+	
+	@Test
+	public void testFindOneReply() {
+		
+		log.info(replyMapper.findReplyOne(5L));
+	}
+	
+	@Test
+	public void testReplyDelete() {
+		ReplyVO replyVO = replyMapper.findReplyOne(5L);
+		replyVO.setDeleteYn(true);
+		
+		log.info(replyMapper.updateReply(replyVO));
+	}
+	
+	@Test
+	public void testReplyUpdate() {
+		ReplyVO replyVO = replyMapper.findReplyOne(5L);
+		replyVO.setTitle("Reply Test Title5(수정)");
+		replyVO.setContent("Reply Test Content5(수정)");
+		
+		replyVO.setDeleteYn(false);
+		
+		log.info(replyMapper.updateReply(replyVO));
+	}
 }
