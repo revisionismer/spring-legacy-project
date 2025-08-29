@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.nexchal.board.domain.ReplyVO;
+import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.mappers.reply.ReplyMapper;
 
 import lombok.extern.log4j.Log4j2;
@@ -58,5 +59,22 @@ public class ReplyMapperTests {
 		replyVO.setDeleteYn(false);
 		
 		log.info(replyMapper.updateReply(replyVO));
+	}
+	
+	@Test
+	public void testReplyListSelect() {
+		
+		// 1, 10
+		Criteria criteria = new Criteria();
+		
+	    replyMapper.findAllReplyList(criteria, 36L).forEach(replyVO -> log.info(replyVO));
+	}
+	
+	@Test
+	public void testReplyTotalCount() {
+		
+		Long bno = 36L;
+		
+		log.info(replyMapper.getTotalCount(null, bno));
 	}
 }
