@@ -48,4 +48,24 @@
 			rno = #{rno}
 	</update>
 	
+	<select id="findAllReplyList" resultType="ReplyVO">
+		SELECT
+			*
+		FROM
+			TB_REPLY
+		WHERE
+			bno = #{bno} AND rno > 0
+		LIMIT
+			#{cri.skip}, #{cri.amount}
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT
+			COUNT(rno)
+		FROM
+			TB_REPLY
+		WHERE
+			bno = #{bno}
+	</select>
+	
 </mapper>

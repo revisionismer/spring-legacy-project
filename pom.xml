@@ -139,10 +139,17 @@
 			<version>1.2</version>
 		</dependency>
 		
-		<!-- jackson : json data -->
+		<!-- jackson.core : json data -->
 		<dependency>
     		<groupId>com.fasterxml.jackson.core</groupId>
     		<artifactId>jackson-databind</artifactId>
+    		<version>2.16.1</version>
+		</dependency>
+		
+		<!-- jackson.datatype : java 8 LocalDateTime 변환 문제때문에 json 데이터가 제대로 출력이 안될때 추가  -->
+		<dependency>
+    		<groupId>com.fasterxml.jackson.datatype</groupId>
+    		<artifactId>jackson-datatype-jsr310</artifactId>
     		<version>2.16.1</version>
 		</dependency>
 

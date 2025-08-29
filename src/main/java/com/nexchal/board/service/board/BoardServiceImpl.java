@@ -3,6 +3,7 @@ package com.nexchal.board.service.board;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nexchal.board.domain.BoardVO;
 import com.nexchal.board.domain.paging.Criteria;
@@ -14,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class BoardServiceImpl implements BoardService {
 
 	private final BoardMapper boardMapper;
