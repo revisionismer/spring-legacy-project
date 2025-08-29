@@ -22,3 +22,4 @@
 20. REST 서비스 소개, @RestController 실습
 21. 댓글 API - REST방식으로 설계하기, MyBatis 댓글 테이블 설계 및 등록 테스트
 22. Mybatis 댓글 조회, 수정, 삭제
+23. Mybatis 댓글 목록, 댓글 API 설계 구현 - 컨트롤러와 목록 처리
