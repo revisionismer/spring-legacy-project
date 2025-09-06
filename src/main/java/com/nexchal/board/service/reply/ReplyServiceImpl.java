@@ -21,7 +21,11 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public Long registerReply(ReplyVO replyVO) {
 		log.info("-----------registerReply()-----------");
-		return replyMapper.insertReply(replyVO);
+	
+		replyMapper.insertReply(replyVO);
+		
+		// Tip : Mapper에 insert시 마지막 rno값을 return 해주는 코드가 들어가서 가능
+		return replyVO.getRno();
 	}
 
 	@Override
