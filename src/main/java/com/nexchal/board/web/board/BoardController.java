@@ -25,14 +25,14 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/board")
 public class BoardController {
 	
-	private final BoardServiceImpl boardService;
+	private final BoardServiceImpl boardServiceImpl;
 	
 	// 1-1. getAllBoardlist 
 //	@GetMapping("/list")
 	public void getAllBoardlist(Model model) {
 		log.info("------------list----------");
 		
-		List<BoardVO> result = boardService.readBoardlist();
+		List<BoardVO> result = boardServiceImpl.readBoardlist();
 		
 		model.addAttribute("list", result);
 		
@@ -46,11 +46,11 @@ public class BoardController {
 		log.info("------------list----------");
 		log.info("criteria : " + criteria);
 		
-		List<BoardVO> result = boardService.readBoardlist(criteria);
+		List<BoardVO> result = boardServiceImpl.readBoardlist(criteria);
 		
 		model.addAttribute("list", result);
 		
-		Pagination pagination = new Pagination(criteria, boardService.getTotalCount(criteria));
+		Pagination pagination = new Pagination(criteria, boardServiceImpl.getTotalCount(criteria));
 		
 		model.addAttribute("pagination", pagination);
 		
@@ -62,7 +62,7 @@ public class BoardController {
 	public String getBoardOne(@PathVariable(name = "bno") Long bno, Model model) {
 		log.info("------------boardOne----------");
 		
-		BoardVO boardVO = boardService.readBoardOne(bno);
+		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
 		
 		log.info("boardVO : " + boardVO);
 		
@@ -76,7 +76,7 @@ public class BoardController {
 	public String modifyBoardOne(@PathVariable(name = "bno") Long bno, Model model) {
 		log.info("------------boardOne----------");
 		
-		BoardVO boardVO = boardService.readBoardOne(bno);
+		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
 		
 		log.info("boardVO : " + boardVO);
 		
@@ -99,7 +99,7 @@ public class BoardController {
 	public String registerBoardPOST(BoardVO boardVO, RedirectAttributes rttr) {
 		log.info("------------board write ----------");
 		
-		Long bno = boardService.createBoard(boardVO);
+		Long bno = boardServiceImpl.createBoard(boardVO);
 	
 		rttr.addFlashAttribute("result", bno);
 		
@@ -120,7 +120,7 @@ public class BoardController {
 			throw new RuntimeException("Bad Request job");
 		}
 		
-		BoardVO boardVO = boardService.readBoardOne(bno);
+		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
 		
 		log.info("boardVO : " + boardVO);
 		
@@ -133,12 +133,12 @@ public class BoardController {
 	public String deleteBookByBno(@PathVariable(name = "bno") Long bno, 
 								  RedirectAttributes rttr) {
 		
-		BoardVO boardVO = boardService.readBoardOne(bno);
+		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
 		boardVO.setDeleteYn(true);
 		
 		log.info("boardVO : " + boardVO);
 		
-		boardService.updateBoard(boardVO);
+		boardServiceImpl.updateBoard(boardVO);
 		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		
@@ -154,7 +154,7 @@ public class BoardController {
 	
 		log.info("boardVO : " + boardVO);
 		
-		boardService.updateBoard(boardVO);
+		boardServiceImpl.updateBoard(boardVO);
 		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		
