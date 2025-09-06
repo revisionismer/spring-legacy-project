@@ -1,11 +1,16 @@
 package com.nexchal.board.web.api;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +29,74 @@ import lombok.extern.log4j.Log4j2;
 public class ReplyApiController {
 
 	private final ReplyServiceImpl replyServiceImpl;
+	
+	@PostMapping("/register")
+	public Map<String, Object> registerReply(@RequestBody ReplyVO replyVO) {
+		
+		Map<String, Object> result = new HashMap<>();
+		
+		Long rno = replyServiceImpl.registerReply(replyVO);
+		
+		log.info("replyVO : " + replyVO);
+		
+		result.put("rno", rno);
+		
+		return result;
+		
+	}
+	
+	@GetMapping("/{rno}") 
+	public Map<String, Object> getReplyOne(@PathVariable("rno") Long rno) {
+		
+		Map<String, Object> result = new HashMap<>();
+		
+		ReplyVO replyVO = replyServiceImpl.getReply(rno);
+		
+		log.info("replyVO : " + replyVO);
+		
+		result.put("replyVO", replyVO);
+		
+		return result;
+		
+	}
+	
+	@DeleteMapping("/{rno}")
+	public Map<String, Object> deleteReplyOneByRno(@PathVariable("rno") Long rno) {
+		
+		Map<String, Object> result = new HashMap<>();
+		
+		ReplyVO replyVO = replyServiceImpl.getReply(rno);
+		replyVO.setDeleteYn(true);
+		
+		log.info("replyVO : " + replyVO);
+		
+		replyServiceImpl.modifyReply(replyVO);
+		
+		ReplyVO deletedReplyVO = replyServiceImpl.getReply(replyVO.getRno());
+		
+		result.put("replyVO", deletedReplyVO);
+		
+		return result;
+		
+	}
+	
+	@PutMapping("/{rno}")
+	public Map<String, Object> modifyReplyOne(@PathVariable("rno") Long rno, 
+											  @RequestBody ReplyVO replyVO) {
+		
+		Map<String, Object> result = new HashMap<>();
+		
+		replyVO.setRno(rno);
+		replyVO.setUpdateDate(LocalDateTime.now());
+		
+		replyServiceImpl.modifyReply(replyVO);
+		
+		ReplyVO updatedReplyVO = replyServiceImpl.getReply(replyVO.getRno());
+		
+		result.put("replyVO", updatedReplyVO);
+		
+		return result;
+	}
 	
 	@GetMapping("/list/{bno}")
 	public Map<String, Object> getReplyListOfBoard(Criteria criteria, @PathVariable("bno") Long bno) {
