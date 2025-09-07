@@ -83,6 +83,10 @@
 
 <script type="text/javascript">
 
+	$(document).ready(function(){
+		getBoardListPaging();
+	});
+
 	const actionForm = document.querySelector("#actionForm");
 	const bno = '${board.bno}';
 	
@@ -109,6 +113,59 @@
 		actionForm.submit();
 		
 	}, false);
+	
+	/*
+		// ajax 양식(GET)
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "json",  // 3-5. 서버에서 결과값으로 받을 데이터의 타입.
+			success: function(res) {
+				console.log(res);
+			},
+			error: function(res) {
+				console.log(res);
+			}
+		});	
+		
+		// ajax 양식(POST)
+		$.ajax({
+			url: url,
+			type: "POST",
+			contentType: "application/json",  // 3-3. 서버로 보낼 데이터 타입
+			data: null,
+			dataType: "json",  // 3-5. 서버에서 결과값으로 받을 데이터의 타입.
+			success: function(res) {
+				console.log(res);
+			},
+			error: function(res) {
+				console.log(res);
+			}
+		});	
+	
+	*/
+	
+	function getBoardListPaging() {
+		
+		var pageNum = 1;
+		var amount = 10;
+		
+		// 2025-09-07 : 여기까지
+		var url = `/api/replies/list/\${bno}?pageNum=\${pageNum}&amount=\${amount}`;
+		
+		$.ajax({
+			type: "GET",
+			url: url,
+			dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
+			contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
+			success: function(res) {
+				console.log(res);
+			},
+			error: function(res) {
+				console.log(res);
+			}
+		});	
+	}
 	
 </script>
 
