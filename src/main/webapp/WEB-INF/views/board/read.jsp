@@ -62,7 +62,46 @@
 				</div>
 			</div>
 		</div>
-	</div>
+		
+		<!-- 댓글 입력 영역 -->
+		<div id="comment-area" class="card shadow">
+    		<!-- Comments Form -->
+    		<div class="card my-4">
+        		<h5 class="card-header">Comment</h5>
+        		<div class="card-body">
+            		<form>
+            			<div class="form-group">
+            				<textarea class="form-control" rows="3"></textarea>
+            			</div>
+            			<button type="submit" class="btn btn-primary">Submit</button>
+            		</form>
+        		</div>
+    		</div>
+ 
+		</div>
+		
+		<!-- 댓글 리스트 영역 -->
+		<div id="replyList" class="d-flex flex-column">
+			<div id="comment">
+				<!-- 이미지는 /resources/img/** 경로로 하게 servlet-context-xml에 설저 -->
+				<img class="d-flex mb-3 ml-2 mr-2 rounded-circle" src="/resources/img/undraw_profile.svg" alt="" style="width: 30px; height: 30px;">
+				<div class="media-body">
+					<!--"작성자 이름  날짜" 및 내용 출력-->
+					<h5 class="mt-0">
+						커멘트 &nbsp;&nbsp;<small class="text-muted">2025-09-14</small>
+					</h5>
+					<p>안녕</p>
+				</div>
+
+				<div id="removeCommentArea" class="m-3">
+					<button type="button" class="close" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		
+	</div>	
 </div>
 
 <form id="actionForm" action="/board/list" method="get">
@@ -145,12 +184,13 @@
 	
 	*/
 	
-	function getBoardListPaging() {
+	function getBoardListPaging(pageParam, amountParam) {
+	
+		const replyList = document.querySelector("#replyList");
 		
-		var pageNum = 1;
-		var amount = 10;
+		var pageNum = pageParam ? pageParam : 1;
+		var amount = amountParam ? amountParam : 10;
 		
-		// 2025-09-07 : 여기까지
 		var url = `/api/replies/list/\${bno}?pageNum=\${pageNum}&amount=\${amount}`;
 		
 		$.ajax({
@@ -160,11 +200,50 @@
 			contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
 			success: function(res) {
 				console.log(res);
+				
+				const pagination = res.pagination;
+				const replies = res.replies;
+				
+				printReplyList(pagination, replies);
 			},
 			error: function(res) {
 				console.log(res);
 			}
 		});	
+	}
+	
+	const printReplyList = (pagination, replies) => {
+		
+		replyList.innerHTML = "";
+		
+		let str = '';
+		
+		for(var i = 0; i < replies.length; i++) {
+			str += `
+				<div id="comment_\${i}" class="m-3 d-flex justify-content-between;">
+					<!-- 이미지는 /resources/img/** 경로로 하게 servlet-context-xml에 설저 -->
+					<img class="d-flex mb-3 ml-2 mr-2 rounded-circle" src="/resources/img/undraw_profile.svg" alt="" style="width: 30px; height: 30px;">
+					<div class="media-body">
+						<!--"작성자 이름  날짜" 및 내용 출력-->
+						<div id="comment_writer" class="mt-0">
+							<h5>\${replies[i].writer} &nbsp;&nbsp;</h5><small class="text-muted">2025-09-14</small>
+						</div>
+						<div id="comment_content">
+							<p>\${replies[i].content}</p>
+						</div>
+					</div>
+
+					<div id="removeCommentArea" class="m-3">
+						<button type="button" id="removeReplyBtn_\${i}" class="close" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+			`
+			
+			replyList.innerHTML = str;
+		}
+		
 	}
 	
 </script>
