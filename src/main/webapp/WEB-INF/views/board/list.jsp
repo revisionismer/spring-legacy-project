@@ -248,7 +248,5 @@
 	
 </script>
 
-<%@include file="../includes/footer.jsp" %>
-
 <!-- 내가 만든 자바스크립트 파일 위치할 곳 -->
 <%@include file="../includes/end.jsp" %>
