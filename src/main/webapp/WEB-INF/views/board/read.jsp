@@ -101,6 +101,22 @@
 			</div>
 		</div>
 		
+		<div id="replyCommentList" class="d-flex justify-content-center">
+			<ul class="pagination">
+    			<li class="page-item">
+    				<a class="page-link" href="#">Previous</a>
+    			</li>
+    						
+    			<li class="page-item">
+    				<a class="page-link" href="#">1</a>
+    			</li>
+						
+    			<li class="page-item">
+    				<a class="page-link" href="#">Next</a>
+    			</li>
+  					
+  			</ul>
+		</div>
 	</div>	
 </div>
 
@@ -183,11 +199,10 @@
 		});	
 	
 	*/
+	const replyList = document.querySelector("#replyList");
 	
 	function getBoardListPaging(pageParam, amountParam) {
 	
-		const replyList = document.querySelector("#replyList");
-		
 		var pageNum = pageParam ? pageParam : 1;
 		var amount = amountParam ? amountParam : 10;
 		
@@ -212,11 +227,13 @@
 		});	
 	}
 	
+	const pageUL = document.querySelector("#replyCommentList .pagination");
+	
 	const printReplyList = (pagination, replies) => {
 		
 		replyList.innerHTML = "";
 		
-		let str = '';
+		let str = ``;
 		
 		for(var i = 0; i < replies.length; i++) {
 			str += `
@@ -239,12 +256,59 @@
 						</button>
 					</div>
 				</div>
-			`
+			`;
 			
 			replyList.innerHTML = str;
 		}
 		
+		// -------------- commentList  --------------
+		const {startPage, endPage, prev, next} = pagination;
+	
+		const pageNum = pagination.criteria.pageNum;
+		
+		let paginationStr = ``;
+		
+		if(prev) {  // 일단 나오게끔 하기위해 !붙임
+			paginationStr += `
+				<li class="page-item">
+					<a class="page-link" href="\${startPage - 1}">Previous</a>
+				</li>
+			`;
+		}
+		
+		for(let i = startPage; i <= endPage; i++) {
+			
+			paginationStr += `
+				<li class="page-item \${i == pageNum ? 'active' : ''}">
+    				<a class="page-link" href="\${i}">\${i}</a>
+    			</li>
+    		`;
+			
+		}
+		
+		if(next) { // 일단 나오게끔 하기위해 !붙임
+			paginationStr += `
+				<li class="page-item">
+					<a class="page-link" href="\${endPage + 1}">Next</a>
+				</li>
+			`;
+		}
+		
+		pageUL.innerHTML = paginationStr;
+		
 	}
+	
+	pageUL.addEventListener("click", (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		
+		const target = e.target;
+		const pageNum = target.getAttribute("href");
+		
+		getBoardListPaging(pageNum);
+		
+	}, false);
+	
 	
 </script>
 
