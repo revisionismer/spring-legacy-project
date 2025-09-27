@@ -30,7 +30,7 @@
 					<option value="TCW" ${cri.typeStr == 'TCW'? 'selected' : ''}>제목 OR 내용 OR 작성자</option>
 				</select>
 				<input type="text" name="keywordInput" value="${cri.keyword}" />
-				<button class="btn-default searchBtn">검색</button>
+				<button class="btn-default btn-sm searchBtn">검색</button>
 			</div>
 			
 			<div class="table-responsive">
@@ -127,6 +127,9 @@
 <%@include file="../includes/footer.jsp" %>
 
 <script type="text/javascript">
+
+	$("select[name='typeSelect']").css('width', '15%');
+	$("select[name='typeSelect']").css('height', '28px');
 	
 	const result = '${result}';
 	

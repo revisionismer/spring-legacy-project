@@ -77,7 +77,6 @@
             		</form>
         		</div>
     		</div>
- 
 		</div>
 		
 		<!-- 댓글 리스트 영역 -->
@@ -118,6 +117,47 @@
   			</ul>
 		</div>
 	</div>	
+</div>
+
+<!-- 댓글 모달창 영역 -->
+<div class="modal" id="replyAddModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Modal Title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">x</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="input-group input-group-lg">
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Replyer</span>
+						</div>
+						<input type="text" name="replyer" class="form-control" />
+					</div>
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Reply Title</span>
+						</div>
+						<input type="text" name="replyTitle" class="form-control"/>
+					</div>
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Reply Content</span>
+						</div>
+						<textarea name="replyContent" class="form-control"></textarea>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" id="replyRegBtn" class="btn btn-primary">Save changes</button>
+				<button type="button" id="closeBtn" class="btn btn-secondary">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <form id="actionForm" action="/board/list" method="get">
@@ -201,10 +241,21 @@
 	*/
 	const replyList = document.querySelector("#replyList");
 	
-	function getBoardListPaging(pageParam, amountParam) {
+	function getBoardListPaging() {
+		
+		// 현재 URL의 쿼리 문자열 받아온다.
+		const queryString = window.location.search;
 	
+		// queryString으로 받아온 문자열을 URLSearchParams에 셋팅
+		const urlParams = new URLSearchParams(queryString);
+		
+		var pageParam = urlParams.get("pageNum");
+		var amountParam = urlParams.get("amount");
+		
 		var pageNum = pageParam ? pageParam : 1;
 		var amount = amountParam ? amountParam : 10;
+		
+		console.log(pageNum, amount);
 		
 		var url = `/api/replies/list/\${bno}?pageNum=\${pageNum}&amount=\${amount}`;
 		
@@ -309,6 +360,52 @@
 		
 	}, false);
 	
+	// 댓글 모달  : 8분 56초
+	const replyAddModal = new bootstrap.Modal(document.querySelector('#replyAddModal'));
+	
+	const replyerInput = document.querySelector("input[name='replyer']");
+	const replyTitleInput = document.querySelector("input[name='replyTitle']");
+	const replyContentInput = document.querySelector("[name='replyContent']");
+	
+	replyAddModal.show();
+	
+	document.querySelector("#replyRegBtn").addEventListener('click', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		
+		var url = "/api/replies/register";
+		
+		const replyerInput = document.querySelector("input[name='replyer']");
+		const replyTitleInput = document.querySelector("input[name='replyTitle']");
+		const replyContentInput = document.querySelector("[name='replyContent']");
+		const bno = '${board.bno}';
+		
+		const replyObj = {
+			writer : replyerInput.value,
+			title : replyTitleInput.value,
+			content : replyContentInput.value,
+			bno : bno
+		}
+
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: JSON.stringify(replyObj),
+			dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
+			contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
+			success: function(res) {
+				console.log(res);
+				var rno = res.rno;
+				
+				replyAddModal.hide();
+			},
+			error: function(res) {
+				console.log(res);
+			}
+		});	
+		
+
+	}, false); 
 	
 </script>
 
