@@ -26,8 +26,8 @@ public class Pagination {
 		// 1-8. 시작 페이지 계산
 		this.startPage = this.endPage - (10 - 1);
 		
-		// 1-9.
-		int realEndPage = (int) (Math.ceil(totalCount * 1.0) / criteria.getAmount());
+		// 1-9. 
+		int realEndPage = (int) (Math.ceil(totalCount * 1.0) / criteria.getAmount() + 1);  // 2025-09-27 : +1해주닌까 정상 동작.
 	
 		// 1-10.
 		if(realEndPage <= this.endPage) {
