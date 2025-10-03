@@ -36,10 +36,13 @@ public class ReplyApiController {
 		Map<String, Object> result = new HashMap<>();
 		
 		Long rno = replyServiceImpl.registerReply(replyVO);
+
+		int replyCount = replyServiceImpl.getTotalReplyWithBno(null, replyVO.getBno());
 		
 		log.info("replyVO : " + replyVO);
 		
 		result.put("rno", rno);
+		result.put("replyCount", replyCount);
 		
 		return result;
 		

@@ -82,7 +82,7 @@
     							<a class="page-link" href="${pagination.startPage - 1}">Previous</a>
     						</li>
     					</c:if>
-    					<c:forEach begin="${pagination.startPage}" end="${pagination.endPage + 1}" var="num">
+    					<c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="num">
     						<li class="page-item ${cri.pageNum == num ? 'active' : ''}">
     							<a class="page-link" href="${num}">${num}</a>
     						</li>
