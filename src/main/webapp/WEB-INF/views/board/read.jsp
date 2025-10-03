@@ -69,12 +69,14 @@
     		<div class="card my-4">
         		<h5 class="card-header">Comment</h5>
         		<div class="card-body">
-            		<form>
+            		<form id="commentForm">
+            			<input type="hidden" id="username" name="username" value="관리자" />
+            			<input type="hidden" id="bno" name="bno" value="${board.bno}" />
             			<div class="form-group">
-            				<textarea class="form-control" rows="3"></textarea>
+            				<textarea id="comment-contents" class="form-control" rows="3"></textarea>
             			</div>
-            			<button type="submit" class="btn btn-primary">Submit</button>
             		</form>
+            		<button id="commentWriteBtn" class="btn btn-primary" style="float: right;">Save</button>
         		</div>
     		</div>
 		</div>
@@ -154,7 +156,7 @@
 			
 			<div class="modal-footer">
 				<button type="button" id="replyRegBtn" class="btn btn-primary">Save changes</button>
-				<button type="button" id="closeBtn" class="btn btn-secondary">Close</button>
+				<button type="button" id="replycloseBtn" class="btn btn-secondary">Close</button>
 			</div>
 		</div>
 	</div>
@@ -179,7 +181,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		getBoardListPaging();
+		getRepliesListPaging();
 	});
 
 	const actionForm = document.querySelector("#actionForm");
@@ -241,21 +243,26 @@
 	*/
 	const replyList = document.querySelector("#replyList");
 	
-	function getBoardListPaging() {
+	// 2025-10-01 : 댓글 페이징 처리
+	var replyPageNum = 1;
+
+	function getRepliesListPaging(pageNum) {
 		
-		// 현재 URL의 쿼리 문자열 받아온다.
+		// 1-1. 현재 URL의 쿼리 문자열 받아온다.
 		const queryString = window.location.search;
 	
-		// queryString으로 받아온 문자열을 URLSearchParams에 셋팅
+		// 1-2. queryString으로 받아온 문자열을 URLSearchParams에 셋팅
 		const urlParams = new URLSearchParams(queryString);
 		
+		// 1-3. 이전 페이지 번호 정보
 		var pageParam = urlParams.get("pageNum");
+		
+		// 1-4 .1페이지내에 보여줄 댓글 게시글 갯수
 		var amountParam = urlParams.get("amount");
-		
-		var pageNum = pageParam ? pageParam : 1;
+	
+		// 1-5. 댓글 목록 함수 파라미터에 댓글 페이징 번호가 있으면 page, 없을떈 1
+		var pageNum = pageNum ? pageNum : 1;
 		var amount = amountParam ? amountParam : 10;
-		
-		console.log(pageNum, amount);
 		
 		var url = `/api/replies/list/\${bno}?pageNum=\${pageNum}&amount=\${amount}`;
 		
@@ -271,6 +278,16 @@
 				const replies = res.replies;
 				
 				printReplyList(pagination, replies);
+				
+				
+				// 2025-10-01 : 여기까지.
+				if(replies.length == 10) {
+					replyPageNum = res.pagination.endPage + 1; 
+				} else {
+					replyPageNum = res.pagination.endPage; 
+				}
+				
+				
 			},
 			error: function(res) {
 				console.log(res);
@@ -301,7 +318,7 @@
 						</div>
 					</div>
 
-					<div id="removeCommentArea" class="m-3">
+					<div id="removeCommentBtnArea" class="m-3">
 						<button type="button" id="removeReplyBtn_\${i}" class="close" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -319,7 +336,7 @@
 		
 		let paginationStr = ``;
 		
-		if(prev) {  // 일단 나오게끔 하기위해 !붙임
+		if(prev) { 
 			paginationStr += `
 				<li class="page-item">
 					<a class="page-link" href="\${startPage - 1}">Previous</a>
@@ -356,7 +373,9 @@
 		const target = e.target;
 		const pageNum = target.getAttribute("href");
 		
-		getBoardListPaging(pageNum);
+		replyPageNum = pageNum;
+		
+		getRepliesListPaging(pageNum);
 		
 	}, false);
 	
@@ -367,8 +386,18 @@
 	const replyTitleInput = document.querySelector("input[name='replyTitle']");
 	const replyContentInput = document.querySelector("[name='replyContent']");
 	
-	replyAddModal.show();
+	document.querySelector("#comment-contents").addEventListener('click', function(e) {
+		replyAddModal.show();
+	}, false);
 	
+	document.querySelector("#replycloseBtn").addEventListener('click', function(e) {
+		replyAddModal.hide();
+		
+		// 2025-10-01 : aria-hidden 문제로 모달창이 닫힌 후에 포커싱을 잡아주기 위해 추가.
+		$('#comment-contents').focus();
+	}, false);
+	
+	// 2025-10-02 : 모달창 띄워서 하는 방법
 	document.querySelector("#replyRegBtn").addEventListener('click', function(e) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -386,26 +415,85 @@
 			content : replyContentInput.value,
 			bno : bno
 		}
-
-		$.ajax({
-			type: "POST",
-			url: url,
-			data: JSON.stringify(replyObj),
-			dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
-			contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
-			success: function(res) {
-				console.log(res);
-				var rno = res.rno;
-				
-				replyAddModal.hide();
-			},
-			error: function(res) {
-				console.log(res);
-			}
-		});	
 		
-
+		if(confirm(`${bno}번 게시글에 댓글을 작성하시겠습니까?`)) {
+			
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: JSON.stringify(replyObj),
+				dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
+				contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
+				success: function(res) {
+					console.log(res);
+					var rno = res.rno;
+					var replyCount = res.replyCount;
+					
+					console.log("rno : ", rno);
+					console.log("replyCount", replyCount);
+					
+					replyerInput.value = '';
+					replyTitleInput.value = '';
+					replyContentInput.value = '';
+				
+					replyAddModal.hide();
+					
+					getRepliesListPaging(replyPageNum);
+				},
+				error: function(res) {
+					console.log(res);
+				}
+			});	
+		}
+		
 	}, false); 
+	
+	// 텍스트 창에서 직접 댓글 다는 방법 
+	document.querySelector("#commentWriteBtn").addEventListener('click', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		
+		var url = "/api/replies/register";
+		
+		const username = document.querySelector("#username");
+		const replyContentInput = document.querySelector("#comment-contents");
+		const bno = document.querySelector("#bno")
+		
+		const replyObj = {
+			writer : username.value,
+			content : replyContentInput.value,
+			bno : bno.value
+		}
+		
+		if(confirm(`${bno}번 게시글에 댓글을 작성하시겠습니까?`)) {
+			
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: JSON.stringify(replyObj),
+				dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
+				contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
+				success: function(res) {
+					console.log(res);
+					var rno = res.rno;
+					var replyCount = res.replyCount;
+					
+					console.log("rno : ", rno);
+					console.log("replyCount", replyCount);
+					
+					replyContentInput.value = '';
+					
+					replyAddModal.hide();
+					
+					getRepliesListPaging(replyPageNum);
+				},
+				error: function(res) {
+					console.log(res);
+				}
+			});	
+		}
+		
+	}, false);
 	
 </script>
 
