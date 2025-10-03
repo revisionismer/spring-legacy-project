@@ -27,7 +27,7 @@ public class Pagination {
 		this.startPage = this.endPage - (10 - 1);
 		
 		// 1-9. 
-		int realEndPage = (int) (Math.ceil(totalCount * 1.0) / criteria.getAmount() + 1);  // 2025-09-27 : +1해주닌까 정상 동작.
+		int realEndPage = (int) (Math.ceil((totalCount * 1.0) / criteria.getAmount()));  // 2025-10-01 : ()괄호 미스가 있어서 수정
 	
 		// 1-10.
 		if(realEndPage <= this.endPage) {
