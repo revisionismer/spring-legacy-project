@@ -23,7 +23,7 @@ public class Pagination {
 		// 1-7. 여기서 10.0은 한 페이지 블록에 뿌려 줄 페이지 번호 갯수
 		this.endPage = (int) (Math.ceil(criteria.getPageNum() / 10.0)) * 10;
 		
-		// 1-8. 시작 페이지 계산
+		// 1-8. 시작 페이지 계산 : 페이지 블록 당 10개의 페이지 번호씩 노출 시킬거닌까 시작페이지(startPage) 번호는  해당 페이지 블록의 끝페이지에서 9(10-1)를 뺀 값.
 		this.startPage = this.endPage - (10 - 1);
 		
 		// 1-9. 
