@@ -155,8 +155,49 @@
 			</div>
 			
 			<div class="modal-footer">
-				<button type="button" id="replyRegBtn" class="btn btn-primary">Save changes</button>
-				<button type="button" id="replycloseBtn" class="btn btn-secondary">Close</button>
+				<button type="button" id="replyRegBtn" class="btn btn-primary">Register</button>
+				<button type="button" id="replyCloseBtn1" class="btn btn-secondary">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="replyViewModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Modal Title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">x</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="input-group input-group-lg">
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Replyer</span>
+						</div>
+						<input type="text" name="v_replyer" class="form-control" />
+					</div>
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Reply Title</span>
+						</div>
+						<input type="text" name="v_replyTitle" class="form-control"/>
+					</div>
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Reply Content</span>
+						</div>
+						<textarea name="v_replyContent" class="form-control"></textarea>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" id="replyModiBtn" class="btn btn-warning">Modify</button>
+				<button type="button" id="replyDelBtn" class="btn btn-danger">Delete</button>
+				<button type="button" id="replyCloseBtn2" class="btn btn-secondary">Close</button>
 			</div>
 		</div>
 	</div>
@@ -245,6 +286,8 @@
 	
 	// 2025-10-01 : 댓글 페이징 처리
 	var replyPageNum = 1;
+	
+	var currentReplyPageNum = 1;
 
 	function getRepliesListPaging(pageNum) {
 		
@@ -277,8 +320,9 @@
 				const pagination = res.pagination;
 				const replies = res.replies;
 				
-				printReplyList(pagination, replies);
+				currentReplyPageNum = pagination.criteria.pageNum;
 				
+				printReplyList(pagination, replies);
 				
 				// 2025-10-01 : 여기까지.
 				if(replies.length == 10) {
@@ -305,7 +349,7 @@
 		
 		for(var i = 0; i < replies.length; i++) {
 			str += `
-				<div id="comment_\${i}" class="m-3 d-flex justify-content-between;">
+				<div data-rno="\${replies[i].rno}" id="comment_\${i}" class="m-3 d-flex justify-content-between;">
 					<!-- 이미지는 /resources/img/** 경로로 하게 servlet-context-xml에 설저 -->
 					<img class="d-flex mb-3 ml-2 mr-2 rounded-circle" src="/resources/img/undraw_profile.svg" alt="" style="width: 30px; height: 30px;">
 					<div class="media-body">
@@ -318,16 +362,16 @@
 						</div>
 					</div>
 
-					<div id="removeCommentBtnArea" class="m-3">
-						<button type="button" id="removeReplyBtn_\${i}" class="close" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
+					<div id="commentBtnArea" class="m-3" style="display: flex; flex-direction: column;">
+						<button type="button" id="detailViewReplyBtn_\${i}" aria-label="View" style="border: 0;background-color: transparent;">
+							<i data-rno="\${replies[i].rno}" class="fas fa-edit"></i>
 						</button>
 					</div>
 				</div>
 			`;
 			
 			replyList.innerHTML = str;
-		}
+		};
 		
 		// -------------- commentList  --------------
 		const {startPage, endPage, prev, next} = pagination;
@@ -364,7 +408,7 @@
 		
 		pageUL.innerHTML = paginationStr;
 		
-	}
+	};
 	
 	pageUL.addEventListener("click", (e) => {
 		e.preventDefault();
@@ -381,6 +425,7 @@
 	
 	// 댓글 모달  : 8분 56초
 	const replyAddModal = new bootstrap.Modal(document.querySelector('#replyAddModal'));
+	const replyViewModal = new bootstrap.Modal(document.querySelector('#replyViewModal'));
 	
 	const replyerInput = document.querySelector("input[name='replyer']");
 	const replyTitleInput = document.querySelector("input[name='replyTitle']");
@@ -390,8 +435,15 @@
 		replyAddModal.show();
 	}, false);
 	
-	document.querySelector("#replycloseBtn").addEventListener('click', function(e) {
+	document.querySelector("#replyCloseBtn1").addEventListener('click', function(e) {
 		replyAddModal.hide();
+		
+		// 2025-10-01 : aria-hidden 문제로 모달창이 닫힌 후에 포커싱을 잡아주기 위해 추가.
+		$('#comment-contents').focus();
+	}, false);
+	
+	document.querySelector("#replyCloseBtn2").addEventListener('click', function(e) {
+		replyViewModal.hide();
 		
 		// 2025-10-01 : aria-hidden 문제로 모달창이 닫힌 후에 포커싱을 잡아주기 위해 추가.
 		$('#comment-contents').focus();
@@ -494,6 +546,82 @@
 		}
 		
 	}, false);
+	
+	// 댓글 조회 모달 창
+	replyList.addEventListener("click", function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		
+		var rno = e.target.getAttribute("data-rno");
+		// 현재 댓글 페이지 번호 : replyPageNum
+		
+		console.log("rno: " + rno);
+		console.log("pageNum: " + currentReplyPageNum);
+
+		getReply(rno);
+		
+		replyViewModal.show();
+		
+		const replyModiBtn = document.querySelector("#replyModiBtn");
+		const replyDelBtn = document.querySelector("#replyDelBtn");
+		
+		var url = `/api/replies/\${rno}`;
+		
+		// 2025-10-07 : 댓글 삭제까지 완료, 수정 부터 다시
+		replyModiBtn.addEventListener("click", () => {
+			console.log(rno + "번 댓글 수정 버튼 클릭");	
+			
+			
+		});
+		
+		replyDelBtn.addEventListener("click", () => {
+			console.log(rno + "번 댓글 삭제 버튼 클릭");	
+			
+			$.ajax({
+				type: "DELETE",
+				url: url,
+				dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
+				contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
+				success: function(res) {
+					console.log(res);
+					replyViewModal.hide();
+					
+					getRepliesListPaging();
+				},
+				error: function(res) {
+					console.log(res);
+				}
+			});	
+		});
+		
+	}, false);
+	
+	function getReply(rno) {
+		const replyerInput = document.querySelector("input[name='v_replyer']");
+		const replyTitleInput = document.querySelector("input[name='v_replyTitle']");
+		const replyContentInput = document.querySelector("[name='v_replyContent']");
+		
+		var url = `/api/replies/\${rno}`;
+		
+		$.ajax({
+			type: "GET",
+			url: url,
+			dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
+			contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
+			success: function(res) {
+				console.log(res);
+				
+				replyerInput.value = res.replyVO.writer;
+				replyTitleInput.value = res.replyVO.title;
+				replyContentInput.value = res.replyVO.content;
+				
+			},
+			error: function(res) {
+				console.log(res);
+			}
+		});	
+	}
+	
 	
 </script>
 
