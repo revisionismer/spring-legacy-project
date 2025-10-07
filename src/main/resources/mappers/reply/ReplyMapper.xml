@@ -54,7 +54,7 @@
 		FROM
 			TB_REPLY
 		WHERE
-			bno = #{bno} AND rno > 0
+			bno = #{bno} AND rno > 0 AND deleteYn = FALSE
 		LIMIT
 			#{cri.skip}, #{cri.amount}
 	</select>
@@ -65,7 +65,7 @@
 		FROM
 			TB_REPLY
 		WHERE
-			bno = #{bno}
+			bno = #{bno} AND deleteYn = FALSE
 	</select>
 	
 </mapper>
