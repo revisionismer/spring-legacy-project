@@ -362,16 +362,26 @@
 						</div>
 					</div>
 
-					<div id="commentBtnArea" class="m-3" style="display: flex; flex-direction: column;">
-						<button type="button" id="detailViewReplyBtn_\${i}" aria-label="View" style="border: 0;background-color: transparent;">
-							<i data-rno="\${replies[i].rno}" class="fas fa-edit"></i>
-						</button>
+					<div id="commentBtnArea" class="m-3" style="display: flex; flex-direction: column; align-items: center;">
+						<div id="commentDetailBtn">
+							<button type="button" id="detailViewReplyBtn_\${i}" aria-label="View" style="border: 0;background-color: transparent;">
+								<i data-rno="\${replies[i].rno}" class="fas fa-edit"></i>
+							</button>
+						</div>
 					</div>
 				</div>
 			`;
 			
 			replyList.innerHTML = str;
 		};
+		
+		/*
+			<div id="commentDeleteBtn">
+				<button type="button" id="removeReplyBtn_\${i}" class="close" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		*/
 		
 		// -------------- commentList  --------------
 		const {startPage, endPage, prev, next} = pagination;
@@ -548,6 +558,7 @@
 	}, false);
 	
 	// 댓글 조회 모달 창
+	
 	replyList.addEventListener("click", function(e) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -570,6 +581,37 @@
 		// 2025-10-07 : 댓글 삭제까지 완료, 수정 부터 다시
 		replyModiBtn.addEventListener("click", () => {
 			console.log(rno + "번 댓글 수정 버튼 클릭");	
+		
+			const replyer = document.querySelector("input[name='v_replyer']");
+			const replyTitle = document.querySelector("[name='v_replyTitle']");
+			const replyContent = document.querySelector("[name='v_replyContent']");
+			const bno = '${board.bno}';
+			
+			const replyObj = {
+				writer : replyer.value,
+				title : replyTitle.value,
+				content : replyContent.value,
+				bno : bno
+			};
+			
+			console.log(replyObj);
+			
+			$.ajax({
+				type: "PUT",
+				url: url,
+				data: JSON.stringify(replyObj),
+				dataType: "json",  // 1-1. 서버에서 결과값으로 받을 데이터의 타입.
+				contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
+				success: function(res) {
+					console.log(res);
+					replyViewModal.hide();
+					
+					getRepliesListPaging(currentReplyPageNum);
+				},
+				error: function(res) {
+					console.log(res);
+				}
+			});	
 			
 			
 		});
@@ -621,7 +663,6 @@
 			}
 		});	
 	}
-	
 	
 </script>
 
