@@ -439,7 +439,7 @@
 	
 	const replyerInput = document.querySelector("input[name='replyer']");
 	const replyTitleInput = document.querySelector("input[name='replyTitle']");
-	const replyContentInput = document.querySelector("[name='replyContent']");
+	const replyContentInput = document.querySelector("textarea[name='replyContent']");
 	
 	document.querySelector("#comment-contents").addEventListener('click', function(e) {
 		replyAddModal.show();
@@ -449,14 +449,16 @@
 		replyAddModal.hide();
 		
 		// 2025-10-01 : aria-hidden 문제로 모달창이 닫힌 후에 포커싱을 잡아주기 위해 추가.
-		$('#comment-contents').focus();
+		// $('#comment-contents').focus();
+		$(this).blur();
 	}, false);
 	
 	document.querySelector("#replyCloseBtn2").addEventListener('click', function(e) {
 		replyViewModal.hide();
 		
 		// 2025-10-01 : aria-hidden 문제로 모달창이 닫힌 후에 포커싱을 잡아주기 위해 추가.
-		$('#comment-contents').focus();
+		// $('#comment-contents').focus();
+		$(this).blur();
 	}, false);
 	
 	// 2025-10-02 : 모달창 띄워서 하는 방법
@@ -468,7 +470,7 @@
 		
 		const replyerInput = document.querySelector("input[name='replyer']");
 		const replyTitleInput = document.querySelector("input[name='replyTitle']");
-		const replyContentInput = document.querySelector("[name='replyContent']");
+		const replyContentInput = document.querySelector("textarea[name='replyContent']");
 		const bno = '${board.bno}';
 		
 		const replyObj = {
@@ -558,7 +560,6 @@
 	}, false);
 	
 	// 댓글 조회 모달 창
-	
 	replyList.addEventListener("click", function(e) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -583,8 +584,8 @@
 			console.log(rno + "번 댓글 수정 버튼 클릭");	
 		
 			const replyer = document.querySelector("input[name='v_replyer']");
-			const replyTitle = document.querySelector("[name='v_replyTitle']");
-			const replyContent = document.querySelector("[name='v_replyContent']");
+			const replyTitle = document.querySelector("input[name='v_replyTitle']");
+			const replyContent = document.querySelector("textarea[name='v_replyContent']");
 			const bno = '${board.bno}';
 			
 			const replyObj = {
@@ -604,15 +605,14 @@
 				contentType: "application/json",  // 1-2. 서버로 보낼 데이터 타입
 				success: function(res) {
 					console.log(res);
-					replyViewModal.hide();
 					
+					replyViewModal.hide();
 					getRepliesListPaging(currentReplyPageNum);
 				},
 				error: function(res) {
 					console.log(res);
 				}
 			});	
-			
 			
 		});
 		
@@ -636,12 +636,15 @@
 			});	
 		});
 		
+		$(this).blur();
+		
+		
 	}, false);
 	
 	function getReply(rno) {
 		const replyerInput = document.querySelector("input[name='v_replyer']");
 		const replyTitleInput = document.querySelector("input[name='v_replyTitle']");
-		const replyContentInput = document.querySelector("[name='v_replyContent']");
+		const replyContentInput = document.querySelector("textarea[name='v_replyContent']");
 		
 		var url = `/api/replies/\${rno}`;
 		
