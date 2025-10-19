@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.nexchal.board.domain.BoardVO;
 import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
-import com.nexchal.board.service.board.BoardServiceImpl;
+import com.nexchal.board.service.board.BoardService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,14 +25,14 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/board")
 public class BoardController {
 	
-	private final BoardServiceImpl boardServiceImpl;
+	private final BoardService boardService;
 	
 	// 1-1. getAllBoardlist 
 //	@GetMapping("/list")
 	public void getAllBoardlist(Model model) {
 		log.info("------------list----------");
 		
-		List<BoardVO> result = boardServiceImpl.readBoardlist();
+		List<BoardVO> result = boardService.readBoardlist();
 		
 		model.addAttribute("list", result);
 		
@@ -46,11 +46,11 @@ public class BoardController {
 		log.info("------------list----------");
 		log.info("criteria : " + criteria);
 		
-		List<BoardVO> result = boardServiceImpl.readBoardlist(criteria);
+		List<BoardVO> result = boardService.readBoardlist(criteria);
 		
 		model.addAttribute("list", result);
 		
-		Pagination pagination = new Pagination(criteria, boardServiceImpl.getTotalCount(criteria));
+		Pagination pagination = new Pagination(criteria, boardService.getTotalCount(criteria));
 		
 		model.addAttribute("pagination", pagination);
 		
@@ -59,10 +59,10 @@ public class BoardController {
 	
 	// 1-2. readBoardOne
 	// @GetMapping("/read/{bno}")
-	public String getBoardOne(@PathVariable(name = "bno") Long bno, Model model) {
+	public String getBoardOne(@PathVariable(value = "bno") Long bno, Model model) {
 		log.info("------------boardOne----------");
 		
-		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
+		BoardVO boardVO = boardService.readBoardOne(bno);
 		
 		log.info("boardVO : " + boardVO);
 		
@@ -73,10 +73,10 @@ public class BoardController {
 	
 	// 1-3. modify
 	// @GetMapping("/modify/{bno}")
-	public String modifyBoardOne(@PathVariable(name = "bno") Long bno, Model model) {
+	public String modifyBoardOne(@PathVariable(value = "bno") Long bno, Model model) {
 		log.info("------------boardOne----------");
 		
-		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
+		BoardVO boardVO = boardService.readBoardOne(bno);
 		
 		log.info("boardVO : " + boardVO);
 		
@@ -99,7 +99,7 @@ public class BoardController {
 	public String registerBoardPOST(BoardVO boardVO, RedirectAttributes rttr) {
 		log.info("------------board write ----------");
 		
-		Long bno = boardServiceImpl.createBoard(boardVO);
+		Long bno = boardService.createBoard(boardVO);
 	
 		rttr.addFlashAttribute("result", bno);
 		
@@ -108,8 +108,8 @@ public class BoardController {
 	
 	// 1-6. read와 modify 페이지 컨트롤러 합치기
 	@GetMapping("/{job}/{bno}")
-	public String readAndUpdateView(@PathVariable(name = "job") String job, 
-									@PathVariable(name = "bno") Long bno,
+	public String readAndUpdateView(@PathVariable(value = "job") String job, 
+									@PathVariable(value = "bno") Long bno,
 									@ModelAttribute("cri") Criteria criteria,
 									Model model) {
 		
@@ -120,7 +120,7 @@ public class BoardController {
 			throw new RuntimeException("Bad Request job");
 		}
 		
-		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
+		BoardVO boardVO = boardService.readBoardOne(bno);
 		
 		log.info("boardVO : " + boardVO);
 		
@@ -130,15 +130,15 @@ public class BoardController {
 	}
 	
 	@PostMapping("/delete/{bno}")
-	public String deleteBookByBno(@PathVariable(name = "bno") Long bno, 
+	public String deleteBookByBno(@PathVariable(value = "bno") Long bno, 
 								  RedirectAttributes rttr) {
 		
-		BoardVO boardVO = boardServiceImpl.readBoardOne(bno);
+		BoardVO boardVO = boardService.readBoardOne(bno);
 		boardVO.setDeleteYn(true);
 		
 		log.info("boardVO : " + boardVO);
 		
-		boardServiceImpl.updateBoard(boardVO);
+		boardService.updateBoard(boardVO);
 		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		
@@ -146,7 +146,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/modify/{bno}")
-	public String modifyBookByBno(@PathVariable(name = "bno") Long bno, 
+	public String modifyBookByBno(@PathVariable(value = "bno") Long bno, 
 								  BoardVO boardVO,
 								  RedirectAttributes rttr) {
 		
@@ -154,7 +154,7 @@ public class BoardController {
 	
 		log.info("boardVO : " + boardVO);
 		
-		boardServiceImpl.updateBoard(boardVO);
+		boardService.updateBoard(boardVO);
 		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		

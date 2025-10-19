@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nexchal.board.domain.ReplyVO;
 import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
-import com.nexchal.board.service.reply.ReplyServiceImpl;
+import com.nexchal.board.service.reply.ReplyService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,16 +28,16 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ReplyApiController {
 
-	private final ReplyServiceImpl replyServiceImpl;
+	private final ReplyService replyService;
 	
 	@PostMapping("/register")
 	public Map<String, Object> registerReply(@RequestBody ReplyVO replyVO) {
 		
 		Map<String, Object> result = new HashMap<>();
 		
-		Long rno = replyServiceImpl.registerReply(replyVO);
+		Long rno = replyService.registerReply(replyVO);
 
-		int replyCount = replyServiceImpl.getTotalReplyWithBno(null, replyVO.getBno());
+		int replyCount = replyService.getTotalReplyWithBno(null, replyVO.getBno());
 		
 		log.info("replyVO : " + replyVO);
 		
@@ -53,7 +53,7 @@ public class ReplyApiController {
 		
 		Map<String, Object> result = new HashMap<>();
 		
-		ReplyVO replyVO = replyServiceImpl.getReply(rno);
+		ReplyVO replyVO = replyService.getReply(rno);
 		
 		log.info("replyVO : " + replyVO);
 		
@@ -68,14 +68,14 @@ public class ReplyApiController {
 		
 		Map<String, Object> result = new HashMap<>();
 		
-		ReplyVO replyVO = replyServiceImpl.getReply(rno);
+		ReplyVO replyVO = replyService.getReply(rno);
 		replyVO.setDeleteYn(true);
 		
 		log.info("replyVO : " + replyVO);
 		
-		replyServiceImpl.modifyReply(replyVO);
+		replyService.modifyReply(replyVO);
 		
-		ReplyVO deletedReplyVO = replyServiceImpl.getReply(replyVO.getRno());
+		ReplyVO deletedReplyVO = replyService.getReply(replyVO.getRno());
 		
 		result.put("replyVO", deletedReplyVO);
 		
@@ -92,9 +92,9 @@ public class ReplyApiController {
 		replyVO.setRno(rno);
 		replyVO.setUpdateDate(LocalDateTime.now());
 		
-		replyServiceImpl.modifyReply(replyVO);
+		replyService.modifyReply(replyVO);
 		
-		ReplyVO updatedReplyVO = replyServiceImpl.getReply(replyVO.getRno());
+		ReplyVO updatedReplyVO = replyService.getReply(replyVO.getRno());
 		
 		result.put("replyVO", updatedReplyVO);
 		
@@ -109,9 +109,9 @@ public class ReplyApiController {
 		
 		Map<String, Object> result = new HashMap<>();
 		
-		List<ReplyVO> replies = replyServiceImpl.getRelpyListWithBno(criteria, bno);
+		List<ReplyVO> replies = replyService.getRelpyListWithBno(criteria, bno);
 	
-		int totalCount = replyServiceImpl.getTotalReplyWithBno(criteria, bno);
+		int totalCount = replyService.getTotalReplyWithBno(criteria, bno);
 		
 		Pagination pagination = new Pagination(criteria, totalCount);
 		
