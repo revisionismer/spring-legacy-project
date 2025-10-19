@@ -3,16 +3,18 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 
-	<!-- WEB과 관련된 설정은 servlet-context.xml에서 처리 -->
+	<!-- WEB(view, controller)과 관련된 설정은 servlet-context.xml에서 처리 -->
 	
 	<!-- 4-1. 컨트롤러 등록(component-scan) : Spring이 관리하는 Bean으로 등록  -->
-	<context:component-scan base-package="com.nexchal.sample" />
+	<context:component-scan base-package="com.nexchal.sample.web" />
 	
 	<!-- 4-2. 컨트롤러 등록(component-scan) : Spring이 관리하는 Bean으로 등록  -->
 	<context:component-scan base-package="com.nexchal.board.web" />
@@ -29,4 +31,5 @@
 	<!-- 4-5. 정적 리소스 처리(Custom) : Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<!-- <resources mapping="/resources/**" location="/resources/" />  -->
 	<mvc:resources mapping="/resources/**" location="classpath:/static/" />
+	
 </beans:beans>
