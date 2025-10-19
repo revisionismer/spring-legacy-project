@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class LogAdvice {
 
-	@Around("execution(* com.nexchal.board.service..*Service.*(..))")
+	@Around("execution(* com.nexchal.board.service..*Service.*(..)) || execution(* com.nexchal.sample.service..*Service.*(..))")
 	public Object logTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		
 		long start = System.currentTimeMillis();
