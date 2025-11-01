@@ -18,24 +18,31 @@
 		
 		<div class="card-body">
 			<div class="content">
-				<form id="boardWriteForm" action="/board/register" method="post">
-					<div class="input-group input-group-lg">
+				<!-- 주의 : 파일 업로드시 폼태크에는 post방식, enctype="multipart/form-data"을 명시해야 파일을 전송한다. -->
+				<form id="boardWriteForm" action="/board/register" method="post" enctype="multipart/form-data">
+					<div class="form-group input-group input-group-lg">
 						<div class="input-group-prepend">
 							<span class="input-group-text">Title</span>
 						</div>
 						<input type="text" id="title" name="title" class="form-control"/>
 					</div>
-					<div class="input-group input-group-lg">
+					<div class="form-group input-group input-group-lg">
 						<div class="input-group-prepend">
 							<span class="input-group-text">Content</span>
 						</div>
 						<textarea id="content" name="content" class="form-control"></textarea>
 					</div>
-					<div class="input-group input-group-lg">
+					<div class="form-group input-group input-group-lg">
 						<div class="input-group-prepend">
 							<span class="input-group-text">Writer</span>
 						</div>
 						<input type="text" id="writer" name="writer" class="form-control"/>
+					</div>
+					<div class="form-group input-group input-group-lg">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Files</span>
+						</div>
+						<input type="file" id="files" name="files" class="form-control" multiple="multiple"/>
 					</div>
 					
 					<div class="mt-3 d-flex justify-content-end">
