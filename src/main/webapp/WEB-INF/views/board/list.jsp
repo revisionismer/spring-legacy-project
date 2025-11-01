@@ -74,7 +74,8 @@
 					</c:forEach>
 					</tbody>
 				</table>
-				<div>
+				<!-- id="board-bottom" style="display: flex; justify-content: space-between;" -->
+				<div class="d-flex justify-content-between">
 					<!-- 2025-08-09 : 여기까지 -->
 					<ul class="pagination">
 						<c:if test="${pagination.prev}">
@@ -91,11 +92,12 @@
     						<li class="page-item"><a class="page-link" href="${pagination.endPage + 1}">Next</a></li>
   						</c:if>
   					</ul>
+  					
+  					<div class="d-sm-flex align-items-center justify-content-end">
+						<button id="boardWriteBtn" class="btn btn-primary mr-2">글쓰기</button>
+					</div>
 				</div>
-			</div>
-			
-			<div class="d-sm-flex align-items-center justify-content-end">
-				<button id="boardWriteBtn" class="btn btn-primary mr-2">글쓰기</button>
+		
 			</div>
 		</div>
 	</div>
