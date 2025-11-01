@@ -19,6 +19,9 @@
 	<!-- 4-2. 컨트롤러 등록(component-scan) : Spring이 관리하는 Bean으로 등록  -->
 	<context:component-scan base-package="com.nexchal.board.web" />
 	
+	<!-- 5-2. FileUtil class를 component-scan 대상으로 지정(컨트롤러단에서 주입받아서 사용할 거기 때문에 여기다가 등록) -->
+	<context:component-scan base-package="com.nexchal.util" />
+	
 	<!-- 4-3. MVC : Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
 	

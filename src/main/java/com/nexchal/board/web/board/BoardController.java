@@ -1,5 +1,6 @@
 package com.nexchal.board.web.board;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -9,12 +10,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nexchal.board.domain.BoardVO;
 import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
 import com.nexchal.board.service.board.BoardService;
+import com.nexchal.util.FileUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +30,8 @@ import lombok.extern.log4j.Log4j2;
 public class BoardController {
 	
 	private final BoardService boardService;
+	
+	private final FileUtil fileUtil;
 	
 	// 1-1. getAllBoardlist 
 //	@GetMapping("/list")
@@ -96,12 +102,20 @@ public class BoardController {
 
 	// 1-5. register(등록)
 	@PostMapping("/register")
-	public String registerBoardPOST(BoardVO boardVO, RedirectAttributes rttr) {
+	public String registerBoardPOST(BoardVO boardVO, 
+								    @RequestParam(value = "files", required = false) MultipartFile[] files, 
+								    RedirectAttributes rttr) {
 		log.info("------------board write ----------");
 		
-		Long bno = boardService.createBoard(boardVO);
+		log.info("----------------------------------");
+		log.info(Arrays.toString(files));
+		log.info("----------------------------------");
+		
+		fileUtil.upload(files);
+		
+//		Long bno = boardService.createBoard(boardVO);
 	
-		rttr.addFlashAttribute("result", bno);
+//		rttr.addFlashAttribute("result", bno);
 		
 		return "redirect:/board/list";
 	}
