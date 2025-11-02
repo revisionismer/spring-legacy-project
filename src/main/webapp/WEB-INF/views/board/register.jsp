@@ -59,6 +59,38 @@
 <%@include file="../includes/footer.jsp"%>
 
 <script type="text/javascript">
+	
+	const boardFormObj = document.querySelector("#boardWriteForm");
+	
+	// 1-1. 파일 업로드 게시판 등록하기 전 유효성 검사(프론트단)
+	document.querySelector("#boardWriteBtn").addEventListener("click", (e) => {
+		e.stopPropagation();
+		e.preventDefault();
+		
+		// 1-2. 파일 확장자 정규 표현식
+		const regex = /(.*?)\.(gif|png|jpg|jpeg|bmp)$/;
+		
+		// 1-3. 
+		const fileInput = document.querySelector("input[name='files']")		
+		
+		// 1-4.
+		const fileArr = fileInput.files;
+		
+		// 1-5.
+		if(fileArr && fileArr.length > 0) {
+			for(const file of fileArr) {
+			//	Tip : console.dir(file);
+				if(!file.name.match(regex)) {
+					fileInput.value = '';
+					alert("이미지 파일만 업로드 할 수 있습니다.");
+					return;
+				}
+			}
+		}
+		
+		boardFormObj.submit();
+		
+	}, false);
 
 </script>
 
