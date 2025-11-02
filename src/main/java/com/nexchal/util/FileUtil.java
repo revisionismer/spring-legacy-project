@@ -11,6 +11,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnails;
 
 @Component
 @Log4j2
@@ -41,6 +42,17 @@ public class FileUtil {
 			// 1-5. 1-4 + 1-3으로 저장될 파일 이름을 생성
 			String saveFileName = uuid + "_" + fileName;
 			
+			// 2-1. 파일명에서 .뒤에 확장자를 가져온다.
+			String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
+			
+			// 2-2. 확장자 정규 표현식
+			String regex = "^(jpg|jpeg|JPG|JPEG|png|PNG|gif|GIF|bmp|BMP)";
+			
+			// 2-3. 2-2의 확장자 정규 표현식을 이용하여 해당 .뒤에 문자가 위의 표현식 안에 포함된 문자열인지 체크하고  해당 파일이 등록된 확장자로된 이미지 파일일 경우에만 파일로 저장하게 한다.
+			if(!suffix.matches(regex)) {
+				continue;
+			}
+			
 			// 1-6.
 			try {
 				// 1-7. 파일 데이터를 읽기 위해 InputStream 가져오기
@@ -51,6 +63,10 @@ public class FileUtil {
 				
 				// 1-9. 파일 복사
 				FileCopyUtils.copy(in, out);
+				
+				// 2-4. 2-1.2-2.2-3을 통과한 이미지 파일이라면 썸네일 이미지를 만든다. 
+				Thumbnails.of(new File(uploadPath + File.separator + saveFileName)).size(200, 200)
+						  .toFile(uploadPath + File.separator + "s_" + saveFileName);
 				
 			} catch (Exception e) {
 				log.error(e.getMessage());
