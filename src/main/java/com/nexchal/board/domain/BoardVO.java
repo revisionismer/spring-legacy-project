@@ -1,6 +1,7 @@
 package com.nexchal.board.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -30,6 +31,8 @@ public class BoardVO {
 	
 	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	private LocalDateTime updateDate;
+	
+	private List<AttachFileVO> attachFileList;
 }
 
 /*

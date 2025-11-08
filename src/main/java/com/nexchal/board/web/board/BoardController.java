@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.nexchal.board.domain.AttachFileVO;
 import com.nexchal.board.domain.BoardVO;
 import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
@@ -106,16 +107,13 @@ public class BoardController {
 								    @RequestParam(value = "files", required = false) MultipartFile[] files, 
 								    RedirectAttributes rttr) {
 		log.info("------------board write ----------");
-		
-		log.info("----------------------------------");
-		log.info(Arrays.toString(files));
-		log.info("----------------------------------");
-		
-		fileUtil.upload(files);
-		
-//		Long bno = boardService.createBoard(boardVO);
 	
-//		rttr.addFlashAttribute("result", bno);
+		List<AttachFileVO> attachFileList = fileUtil.upload(files);
+		boardVO.setAttachFileList(attachFileList);
+		
+		Long bno = boardService.createBoard(boardVO);
+	
+		rttr.addFlashAttribute("result", bno);
 		
 		return "redirect:/board/list";
 	}
