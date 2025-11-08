@@ -40,7 +40,7 @@ public class BoardMapperTests {
 		boardVO.setContent("New Test Content");
 		boardVO.setWriter("New Test Writer");
 		
-		log.info("COUNT : " + boardMapper.insert(boardVO));
+		log.info("COUNT : " + boardMapper.insertBoard(boardVO));
 		
 		log.info("BNO : " + boardVO.getBno());
 	}
@@ -51,7 +51,7 @@ public class BoardMapperTests {
 		
 		Long bno = 3L;
 		
-		log.info(boardMapper.select(bno));
+		log.info(boardMapper.selectBoard(bno));
 	}
 	
 	@Test
@@ -59,11 +59,11 @@ public class BoardMapperTests {
 		
 		Long bno = 2L;
 		
-		BoardVO findBoard = boardMapper.select(bno);
+		BoardVO findBoard = boardMapper.selectBoard(bno);
 		findBoard.setTitle("New Test Title(수정)");
 		findBoard.setContent("New Test Content(수정)");
 		
-		int updateCount = boardMapper.update(findBoard);
+		int updateCount = boardMapper.updateBoard(findBoard);
 		
 		log.info("update count : " + updateCount);
 	}

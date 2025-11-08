@@ -4,11 +4,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.nexchal.board.domain.AttachFileVO;
 
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
@@ -19,11 +23,13 @@ public class FileUtil {
 	
 	private final String uploadPath = "C:\\upload\\nexchal";
 
-	public void upload(MultipartFile[] files) {
+	public List<AttachFileVO> upload(MultipartFile[] files) {
+		
+		List<AttachFileVO> fileList = new ArrayList<>();
 		
 		// 1-1. 파일이 null이거나 파일이 없으면 그냥 return
 		if(files == null || files.length == 0) {
-			return;
+			return fileList;
 		}
 		
 		for(MultipartFile file : files) {
@@ -68,9 +74,20 @@ public class FileUtil {
 				Thumbnails.of(new File(uploadPath + File.separator + saveFileName)).size(200, 200)
 						  .toFile(uploadPath + File.separator + "s_" + saveFileName);
 				
+				// 3-1. 
+				AttachFileVO attachFileVO = new AttachFileVO();
+				attachFileVO.setUuid(uuid);
+				attachFileVO.setFilename(fileName);
+				
+				// 3-2.
+				fileList.add(attachFileVO);
+				
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}
 		}
+		
+		// 3-3. 업로드된 파일 리스트 정보 반환
+		return fileList;
 	}
 }
