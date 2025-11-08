@@ -51,7 +51,7 @@
 		
 	</select>
 	
-	<insert id="insert">
+	<insert id="insertBoard">
 		<selectKey order="AFTER" keyProperty="bno" resultType="long">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
@@ -70,7 +70,7 @@
 		)
 	</insert>
 	
-	<select id="select" parameterType="long" resultType="BoardVO">
+	<select id="selectBoard" parameterType="long" resultType="BoardVO">
 		SELECT
 			*
 		FROM 
@@ -79,7 +79,7 @@
 			bno = #{bno}
 	</select>
 	
-	<update id="update">
+	<update id="updateBoard">
 		UPDATE
 			TB_BOARD
 		SET

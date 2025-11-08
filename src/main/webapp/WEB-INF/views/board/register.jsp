@@ -68,10 +68,10 @@
 		e.preventDefault();
 		
 		// 1-2. 파일 확장자 정규 표현식
-		const regex = /(.*?)\.(gif|png|jpg|jpeg|bmp)$/;
+		const regex = /(.*?)\.(gif|png|jpg|jpeg|bmp|GIF|PNG|JPG|JPEG|BMP)$/;
 		
 		// 1-3. 
-		const fileInput = document.querySelector("input[name='files']")		
+		const fileInput = document.querySelector("input[name='files']");	
 		
 		// 1-4.
 		const fileArr = fileInput.files;
