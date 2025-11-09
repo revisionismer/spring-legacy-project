@@ -1,6 +1,5 @@
 package com.nexchal.board.web.board;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;

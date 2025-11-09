@@ -61,6 +61,14 @@
 					<button type="button" class="btn btn-warning btnBoardList">목록으로</button>
 				</div>
 			</div>
+			
+			<div class="attachFileList d-flex">
+				<c:if test="${board.attachFileList != null && board.attachFileList.size() > 0}">
+					<c:forEach items="${board.attachFileList}" var="boardFile">
+						<div>${boardFile}</div>
+					</c:forEach>
+				</c:if>
+			</div>
 		</div>
 		
 		<!-- 댓글 입력 영역 -->
