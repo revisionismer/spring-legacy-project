@@ -31,9 +31,12 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!-- 4-5. 정적 리소스 처리(Custom) : Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- 4-5. 정적 리소스 처리(Custom) 1 - Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<!-- <resources mapping="/resources/**" location="/resources/" />  -->
 	<mvc:resources mapping="/resources/**" location="classpath:/static/" />
+	
+	<!-- 5-3. 정적 리소스 처리(Custom) 2 - mapping의 형태의 url로 들어오면 해당 location 지정된 곳에서 파일을 찾는다. -->
+	<mvc:resources mapping="/images/**" location="file:///C:/upload/nexchal/" />
 	
 	<!-- 5-1. 파일 업로드 설정(multipartResolver) -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>

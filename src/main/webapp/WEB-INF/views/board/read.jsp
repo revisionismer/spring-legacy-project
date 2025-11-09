@@ -65,7 +65,14 @@
 			<div class="attachFileList d-flex">
 				<c:if test="${board.attachFileList != null && board.attachFileList.size() > 0}">
 					<c:forEach items="${board.attachFileList}" var="boardFile">
-						<div>${boardFile}</div>
+						<c:if test="${boardFile.ano != null}">
+							<div id="thumnailImageArea">
+								<!-- a 태그는 target 속성에 _blank가 있으면 새창으로 열어준다. -->
+								<a href="/images/${boardFile.savedFileName}" target="_blank">
+									<img src="/images/s_${boardFile.savedFileName}" alt="image" >
+								</a>
+							</div>
+						</c:if>
 					</c:forEach>
 				</c:if>
 			</div>

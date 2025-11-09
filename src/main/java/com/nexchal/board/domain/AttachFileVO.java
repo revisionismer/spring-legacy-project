@@ -11,6 +11,15 @@ public class AttachFileVO {
 	private String uuid;
 	
 	private String filename;
+	
+	public String getSavedFileName() {
+		
+		if(ano == null) {
+			return null;
+		}
+		
+		return uuid + "_" + filename;
+	}
 }
 
 /*
