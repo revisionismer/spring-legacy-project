@@ -70,13 +70,41 @@
 		)
 	</insert>
 	
-	<select id="selectBoard" parameterType="long" resultType="BoardVO">
-		SELECT
-			*
-		FROM 
-			TB_BOARD
-		WHERE
-			bno = #{bno}
+	<!-- 
+	   -규칙 LEFT OUTER JOIN 시 -
+		우측 ON 절에서는(널값으로 채워지는 쪽)의 추가 제약조건을 넣고 
+		좌측의 추가 제약조건은 WHERE절에 넣어야 한다. 
+		-> LEFT OUTER JOIN은 왼쪽에 없는 값은 오른쪽에는 NULL로 채운다.
+	 -->
+	 <resultMap id="boardMap" type="BoardVO">
+	 	<id property="bno" column="bno" /> <!-- group by 역할 -->
+	 	<result property="title" column="title" />
+	 	<result property="content" column="content" />
+	 	<result property="writer" column="writer" />
+	 	<result property="createDate" column="createDate" />
+	 	<result property="updateDate" column="updateDate" />
+	 	<result property="deleteYn" column="deleteYn" />
+	 	<collection property="attachFileList" resultMap="attatchFileMap"></collection>
+	 </resultMap>
+	 
+	 <resultMap id="attatchFileMap" type="AttachFileVO" >
+	 	<result property="ano" column="ano" />
+	 	<result property="bno" column="bno" />
+	 	<result property="uuid" column="uuid" />
+	 	<result property="filename" column="filename" />
+	 </resultMap>
+	 
+	<select id="selectBoard" parameterType="long" resultMap="boardMap">
+		SELECT 
+			* 
+		FROM
+			tb_board tb 
+				LEFT OUTER JOIN 
+					tb_attach ta 
+				ON 
+					tb.bno = ta.bno
+		WHERE 
+			tb.bno = #{bno}
 	</select>
 	
 	<update id="updateBoard">
