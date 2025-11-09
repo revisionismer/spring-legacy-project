@@ -12,3 +12,17 @@ public class AttachFileVO {
 	
 	private String filename;
 }
+
+/*
+ * 
+	CREATE TABLE tb_attach(
+		ano INT AUTO_INCREMENT PRIMARY KEY,
+		UUID VARCHAR(50) NULL,
+		bno INT NOT NULL,
+		filename VARCHAR(500) NOT NULL
+   	);	
+
+	CREATE INDEX idx_attach ON tb_attach(bno DESC, ano ASC);
+ * 
+ */
+ 
