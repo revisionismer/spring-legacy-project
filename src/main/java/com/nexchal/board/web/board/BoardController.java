@@ -46,9 +46,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/list")
-	public void getAllBoardlist(
-			@ModelAttribute("cri") Criteria criteria, 
-			Model model) {
+	public void getAllBoardlist(@ModelAttribute("cri") Criteria criteria, Model model) {
 		log.info("------------list----------");
 		log.info("criteria : " + criteria);
 		
@@ -102,8 +100,8 @@ public class BoardController {
 
 	// 1-5. register(등록)
 	@PostMapping("/register")
-	public String registerBoardPOST(BoardVO boardVO, 
-								    @RequestParam(value = "files", required = false) MultipartFile[] files, 
+	public String registerBoardPOST(@RequestParam(value = "files", required = false) MultipartFile[] files, 
+									BoardVO boardVO,  
 								    RedirectAttributes rttr) {
 		log.info("------------board write ----------");
 	
@@ -158,10 +156,17 @@ public class BoardController {
 	
 	@PostMapping("/modify/{bno}")
 	public String modifyBookByBno(@PathVariable(value = "bno") Long bno, 
+								  @RequestParam(value = "files", required = false) MultipartFile[] files,
 								  BoardVO boardVO,
 								  RedirectAttributes rttr) {
 		
 		boardVO.setBno(bno);
+		
+		List<AttachFileVO> attachFileList = fileUtil.upload(files);
+		
+		if(attachFileList != null && attachFileList.size() > 0) {
+			boardVO.setAttachFileList(attachFileList);
+		}
 	
 		log.info("boardVO : " + boardVO);
 		
