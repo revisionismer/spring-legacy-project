@@ -18,7 +18,7 @@
 
 		<div class="card-body">
 			<div class="content">
-				<form id="boardForm">
+				<form id="boardModifyForm" method="post" enctype="multipart/form-data">
 				
 					<div class="input-group input-group-lg">
 						<div class="input-group-prepend">
@@ -58,6 +58,13 @@
 						</div>
 						<input type="text" id="updateDate" name="updateDate" class="form-control" value="<c:out value="${board.updateDate}"></c:out>" readonly="readonly" disabled="disabled" />
 					</div>
+					
+					<div class="form-group input-group input-group-lg">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Files</span>
+						</div>
+						<input type="file" id="files" name="files" class="form-control" multiple="multiple"/>
+					</div>
 				
 					<div class="mt-3 d-flex justify-content-end">
 						<button type="button" class="btn btn-info mr-2 btnBoardModify">수정하기</button>
@@ -66,7 +73,27 @@
 					</div>
 				</form>
 			</div>
+			
+			<div class="attachFileList d-flex">
+				<c:if test="${board.attachFileList != null && board.attachFileList.size() > 0}">
+					<c:forEach items="${board.attachFileList}" var="boardFile">
+						<c:if test="${boardFile.ano != null}">
+							<div id="thumnailImageArea" class="d-flex">
+								<!-- a 태그는 target 속성에 _blank가 있으면 새창으로 열어준다. -->
+								<a href="/images/${boardFile.savedFileName}" target="_blank">
+									<img src="/images/s_${boardFile.savedFileName}" alt="image" >
+								</a>
+								<div>
+									<button id="removeImgBtn" class="btn" onclick='alert("${boardFile.ano}")'>X</button>
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
+				</c:if>
+			</div>
+		
 		</div>
+		
 	</div>
 </div>
 <!-- /.container-fluid -->
@@ -90,7 +117,7 @@
 <script type="text/javascript">
 
 	const bno = `${board.bno}`;
-	const boardForm = document.querySelector("#boardForm");
+	const boardModifyForm = document.querySelector("#boardModifyForm");
 	
 	const actionForm = document.querySelector("#actionForm");
 
@@ -114,9 +141,9 @@
 		e.stopPropagation();
 		
 		if(confirm(`\${bno}번 게시글을 수정하시겠습니까?`)) {
-			boardForm.action = `/board/modify/\${bno}`;
-			boardForm.method = 'post';
-			boardForm.submit();
+			boardModifyForm.action = `/board/modify/\${bno}`;
+			boardModifyForm.method = 'post';
+			boardModifyForm.submit();
 		}
 		
 	}, false);

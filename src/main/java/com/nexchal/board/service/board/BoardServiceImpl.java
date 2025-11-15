@@ -65,7 +65,22 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean updateBoard(BoardVO boardVO) {
-		return boardMapper.updateBoard(boardVO) == 1 ? true : false;
+		
+		int count = boardMapper.updateBoard(boardVO);
+		
+		List<AttachFileVO> attachFileList = boardVO.getAttachFileList();
+		
+		if(attachFileList != null && attachFileList.size() > 0 && count == 1) {
+			
+			for(AttachFileVO attachFileVO : attachFileList) {
+				
+				attachFileVO.setBno(boardVO.getBno());
+				
+				boardFileMapper.insertAttachFile(attachFileVO);
+			}
+		}
+		
+		return count == 1 ? true : false;
 	}
 
 	@Override
