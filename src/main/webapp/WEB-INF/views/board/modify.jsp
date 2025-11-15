@@ -18,7 +18,7 @@
 
 		<div class="card-body">
 			<div class="content">
-				<form id="boardModifyForm" method="post" enctype="multipart/form-data">
+				<form id="boardForm" method="post" enctype="multipart/form-data">
 				
 					<div class="input-group input-group-lg">
 						<div class="input-group-prepend">
@@ -117,7 +117,7 @@
 <script type="text/javascript">
 
 	const bno = `${board.bno}`;
-	const boardModifyForm = document.querySelector("#boardModifyForm");
+	const boardForm = document.querySelector("#boardForm");
 	
 	const actionForm = document.querySelector("#actionForm");
 
@@ -141,9 +141,9 @@
 		e.stopPropagation();
 		
 		if(confirm(`\${bno}번 게시글을 수정하시겠습니까?`)) {
-			boardModifyForm.action = `/board/modify/\${bno}`;
-			boardModifyForm.method = 'post';
-			boardModifyForm.submit();
+			boardForm.action = `/board/modify/\${bno}`;
+			boardForm.method = 'post';
+			boardForm.submit();
 		}
 		
 	}, false);
