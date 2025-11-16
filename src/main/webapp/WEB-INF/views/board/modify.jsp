@@ -71,6 +71,9 @@
 						<button type="button" class="btn btn-danger mr-2 btnBoardDelete">삭제하기</button>
 						<button type="button" class="btn btn-warning btnBoardList">목록으로</button>
 					</div>
+					
+					<!-- 삭제될 이미지들을 담는 임시 저장소 input hidden으로 만들어서 추가한다. -->
+					<div class="deleteImages"></div>
 				</form>
 			</div>
 			
@@ -83,8 +86,10 @@
 								<a href="/images/${boardFile.savedFileName}" target="_blank">
 									<img src="/images/s_${boardFile.savedFileName}" alt="image" >
 								</a>
-								<div>
-									<button id="removeImgBtn" class="btn" onclick='alert("${boardFile.ano}")'>X</button>
+								<div id="removeImgArea">
+									<button id="removeImgBtn" class="btn" 
+											data-ano="${boardFile.ano}" 
+											data-fullname="${boardFile.savedFileName}">X</button>
 								</div>
 							</div>
 						</c:if>
@@ -159,6 +164,36 @@
 			boardForm.action = `/board/delete/\${bno}`;
 			boardForm.method = 'post';
 			boardForm.submit();	
+		}
+		
+	}, false);
+	
+	// 이미지 삭제 이벤트 처리
+	document.querySelector(".attachFileList").addEventListener("click", (e) => {
+		
+		const target = e.target;
+		
+		if(target.tagName !== 'BUTTON') {
+			return;
+		}
+		
+		const ano = target.getAttribute("data-ano");
+		const fullname = target.getAttribute("data-fullname");
+		
+		console.log("ano :", ano, "fullname : ", fullname);
+		
+		if(ano && fullname) {
+			
+			let str = '';
+			
+			str += `<input type='hidden' id='anos' name='anos' value='\${ano}'>`;
+			str += `<input type='hidden' id='fullnames' name='fullnames' value='\${fullname}'>`;
+			
+			// 1-1. target에서 가장 가까운 thumnailImageArea를 없애준다.(아직 DB에서 삭제 안됨)
+			target.closest("#thumnailImageArea").remove();
+			
+			// 1-2. 화면에서 삭제된 이미지를 input hidden 태그로 추가한다.
+			document.querySelector(".deleteImages").innerHTML += str;
 		}
 		
 	}, false);
