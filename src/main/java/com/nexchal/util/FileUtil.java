@@ -90,4 +90,24 @@ public class FileUtil {
 		// 3-3. 업로드된 파일 리스트 정보 반환
 		return fileList;
 	}
+	
+	public void deleteFiles(String[] fullnames) {
+		
+		if(fullnames == null || fullnames.length == 0) {
+			return;
+		}
+		
+		for(String fullname : fullnames) {
+			// 3-4. 원본 파일
+			File originalImgFile = new File(uploadPath + File.separator + fullname);
+			
+			// 3-5. 섬네일 이미지 파일
+			File thumnailImgFile = new File(uploadPath + File.separator + "s_" + fullname);
+			
+			originalImgFile.delete();
+			thumnailImgFile.delete();
+		}
+		
+	}
+	
 }

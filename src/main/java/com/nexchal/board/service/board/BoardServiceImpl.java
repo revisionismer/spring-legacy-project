@@ -64,11 +64,15 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public boolean updateBoard(BoardVO boardVO) {
+	public boolean updateBoard(BoardVO boardVO, Long[] anos) {
 		
 		int count = boardMapper.updateBoard(boardVO);
 		
 		List<AttachFileVO> attachFileList = boardVO.getAttachFileList();
+		
+		if(anos != null && anos.length > 0) {
+			boardFileMapper.deleteAttachFiles(anos);
+		}
 		
 		if(attachFileList != null && attachFileList.size() > 0 && count == 1) {
 			
