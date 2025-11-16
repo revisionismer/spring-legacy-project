@@ -147,7 +147,7 @@ public class BoardController {
 		
 		log.info("boardVO : " + boardVO);
 		
-		boardService.updateBoard(boardVO);
+		boardService.updateBoard(boardVO, null);
 		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		
@@ -157,6 +157,8 @@ public class BoardController {
 	@PostMapping("/modify/{bno}")
 	public String modifyBookByBno(@PathVariable(value = "bno") Long bno, 
 								  @RequestParam(value = "files", required = false) MultipartFile[] files,
+								  @RequestParam(value = "anos", required = false) Long[] anos,
+								  @RequestParam(value = "fullnames", required = false) String[] fullnames,	  
 								  BoardVO boardVO,
 								  RedirectAttributes rttr) {
 		
@@ -170,7 +172,11 @@ public class BoardController {
 	
 		log.info("boardVO : " + boardVO);
 		
-		boardService.updateBoard(boardVO);
+		boardService.updateBoard(boardVO, anos);
+		
+		// 프론트단에서 삭제될 대상의 파일들을 삭제
+		fileUtil.deleteFiles(fullnames);
+		
 		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		

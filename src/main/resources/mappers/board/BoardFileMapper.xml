@@ -17,4 +17,13 @@
 			#{filename}
 		)	
 	</insert>
+	
+	<delete id="deleteAttachFiles">
+		DELETE FROM TB_ATTACH
+		<where>
+			<foreach collection="anos" item="ano" open="ano in (" close=")" separator=",">
+				#{ano}
+			</foreach>
+		</where>
+	</delete>
 </mapper>

@@ -169,7 +169,7 @@
 	}, false);
 	
 	// 이미지 삭제 이벤트 처리
-	document.querySelector(".attachFileList").addEventListener("click", (e) => {
+	document.querySelector(".attachFileList").addEventListener("click", function(e) {
 		
 		const target = e.target;
 		
