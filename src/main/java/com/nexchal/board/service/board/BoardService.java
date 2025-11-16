@@ -15,7 +15,7 @@ public interface BoardService {
 	
 	public BoardVO readBoardOne(Long bno);
 	
-	public boolean updateBoard(BoardVO boardVO);
+	public boolean updateBoard(BoardVO boardVO, Long[] ano);
 	
 	public boolean deleteBoard(Long bno);
 	

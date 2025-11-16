@@ -1,6 +1,7 @@
 package com.nexchal.board.mappers.board;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.nexchal.board.domain.AttachFileVO;
 
@@ -8,4 +9,6 @@ import com.nexchal.board.domain.AttachFileVO;
 public interface BoardFileMapper {
 
 	int insertAttachFile(AttachFileVO attachFileVO);
+	
+	void deleteAttachFiles(@Param("anos") Long[] anos);
 }
