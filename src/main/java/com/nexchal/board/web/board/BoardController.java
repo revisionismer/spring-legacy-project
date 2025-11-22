@@ -140,6 +140,8 @@ public class BoardController {
 	
 	@PostMapping("/delete/{bno}")
 	public String deleteBookByBno(@PathVariable(value = "bno") Long bno, 
+								  @RequestParam(value = "anos", required = false) Long[] anos,
+								  @RequestParam(value = "fullnames", required = false) String[] fullnames, 
 								  RedirectAttributes rttr) {
 		
 		BoardVO boardVO = boardService.readBoardOne(bno);
@@ -147,7 +149,10 @@ public class BoardController {
 		
 		log.info("boardVO : " + boardVO);
 		
-		boardService.updateBoard(boardVO, null);
+		boardService.updateBoard(boardVO, anos);  // 기존 : boardService.updateBoard(boardVO, null);
+		
+		// 프론트단에서 삭제될 대상의 파일들을 삭제
+		fileUtil.deleteFiles(fullnames);
 		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		
