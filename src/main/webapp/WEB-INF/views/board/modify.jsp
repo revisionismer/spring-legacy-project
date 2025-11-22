@@ -160,6 +160,27 @@
 		// 전파 방지
 		e.stopPropagation();
 		
+		// 삭제 해야 하는 파일들을 hidden 태그로 만들어 준다.
+		const fileArr = document.querySelectorAll(".attachFileList #removeImgBtn");
+		
+		console.log(fileArr);
+		
+		if(fileArr && fileArr.length > 0) {
+			
+			let str = '';
+			
+			for (const btn of fileArr) {
+				const ano = btn.getAttribute("data-ano");
+				const fullname = btn.getAttribute("data-fullname");
+				
+				str += `<input type='hidden' id='anos' name='anos' value='\${ano}'>`;
+				str += `<input type='hidden' id='fullnames' name='fullnames' value='\${fullname}'>`;
+				
+			}
+			
+			document.querySelector(".deleteImages").innerHTML += str;
+		}
+		
 		if(confirm(`\${bno}번 게시글을 삭제하시겠습니까?`)) {
 			boardForm.action = `/board/delete/\${bno}`;
 			boardForm.method = 'post';
