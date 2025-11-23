@@ -14,11 +14,16 @@
 
 	<!-- Logger 설정 -->
 	<Loggers>
-		<Logger name="com.zaxxer" level="DEBUG" additivity="false">
+		<Logger name="com.zaxxer" level="INFO" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
 		
-		<Logger name="com.nexchal" level="TRACE" additivity="false">
+		<Logger name="com.nexchal" level="INFO" additivity="false">
+			<AppenderRef ref="console" />
+		</Logger>
+		
+		<!-- spring-security log 설정 추가 : 2025-11-23 -->
+		<Logger name="org.springframework.security" level="TRACE" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
 		
