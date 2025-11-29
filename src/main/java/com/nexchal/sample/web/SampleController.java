@@ -90,4 +90,25 @@ public class SampleController {
 		
 		return "redirect:/sample/basic";
 	}
+	
+	@GetMapping("/all")
+	public String ex08_모든사용자() {
+		log.info("-------- 스프링 시큐리티 테스트(비회원) --------------");
+		
+		return "/sample/all";
+	}
+	
+	@GetMapping("/member")
+	public String ex08_회원인사용자() {
+		log.info("-------- 스프링 시큐리티 테스트(회원) --------------");
+		
+		return "/sample/member";
+	}
+	
+	@GetMapping("/admin")
+	public String ex08_관리자인사용자() {
+		log.info("-------- 스프링 시큐리티 테스트(관리자) --------------");
+		
+		return "/sample/admin";
+	}
 }
