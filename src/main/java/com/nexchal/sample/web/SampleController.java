@@ -98,7 +98,7 @@ public class SampleController {
 		return "/sample/all";
 	}
 	
-	@GetMapping("/member")
+	@GetMapping("/user")
 	public String ex08_회원인사용자() {
 		log.info("-------- 스프링 시큐리티 테스트(회원) --------------");
 		
