@@ -46,3 +46,4 @@
 44. 스프링 시큐리티 소개 및 시큐리티 적용을 위한 설정
 45. 시큐리티의 적용 확인
 46. 패스워드 인코더와 로그인 테스트, AccessDenied와 커스텀 로그인 1, 2
+47. 로그인 성공 처리와 로그아웃 성공 처리(CustomLoginHandler, CustomLogoutHandler)
