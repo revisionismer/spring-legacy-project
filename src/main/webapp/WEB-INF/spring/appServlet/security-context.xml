@@ -11,11 +11,21 @@
 	<!-- 2-1. custom403ExceptionHandler 빈으로 등록 -->
 	<bean id="custom403ExceptionHandler" class="com.nexchal.config.security.handler.Custom403ExceptionHandler" />
 	
+	<!-- 2-5. customLoginSuccessHandler 빈으로 등록 -->
+	<bean id="customLoginSuccessHandler" class="com.nexchal.config.security.handler.CustomLoginSuccessHandler"/>
+		
+	<!-- 2-7. CustomLogoutSuccessHandler 빈으로 등록 -->
+	<bean id="customLogoutSuccessHandler" class="com.nexchal.config.security.handler.CustomLogoutSuccessHandler"/>
+		
 	<!-- 1-1. security:http 설정이 안되어 있을때 no bean 관련 에러가 터지니 시큐리티 의존성 추가후 반드시 작성 -->
 	<security:http>
 		<!-- 1-1. -->
 		<!-- 2-3. 내가 사용할 기본 로그인 접근 경로는 /user/login이라고 선언-->
-		<security:form-login login-page="/user/login" />
+		<!-- 2-6. CustomLoginSuccessHandler를 폼로그인 ref로 등록 : 인증에 성공했을 떄 커스텀으로 처리하기 위해 등록 -->
+		<security:form-login 
+			login-page="/user/login" 
+			authentication-success-handler-ref="customLoginSuccessHandler"
+		/>
 		
 		<!-- 2.4. CSRF(Cross-Site Request Forgery) 토큰 비활성화 : 로그인 페이지 만들기 전 설정 -->
 		<security:csrf disabled="true" />
@@ -27,6 +37,9 @@
 	
 		<!-- 2-2. 2-1에 등록한 custom403ExceptionHandler 빈을 연결  -->
 		<security:access-denied-handler ref="custom403ExceptionHandler" />
+	
+		<!-- 2-8. 2-7에서 등록해놓은 CustomLogoutHadnler 빈을 연결 -->
+		<security:logout success-handler-ref="customLogoutSuccessHandler" />
 	
 	</security:http>
 
