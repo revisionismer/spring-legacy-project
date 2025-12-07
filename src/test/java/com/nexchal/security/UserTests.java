@@ -94,4 +94,11 @@ public class UserTests {
 		log.info("============================");
 		
 	}
+	
+	@Test
+	public void testResultMapSelect() {
+		String username = "admin";
+		
+		log.info(userMapper.selectUser(username));
+	}
 }

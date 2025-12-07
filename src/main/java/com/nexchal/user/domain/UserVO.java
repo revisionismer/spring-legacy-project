@@ -42,7 +42,7 @@ public class UserVO {
 CREATE TABLE tb_user(
 	`uno` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`username` VARCHAR(100) NOT NULL UNIQUE KEY,
-	`paasword` VARCHAR(100) NOT NULL,
+	`password` VARCHAR(100) NOT NULL,
 	`name` VARCHAR(100) NOT NULL,
 	`email` VARCHAR(100) NOT NULL,
 	`createDate` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
