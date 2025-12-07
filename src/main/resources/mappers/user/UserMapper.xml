@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.nexchal.user.mappers.UserMapper">
+	
+	<!-- 1-1. 회원 가입 -->
+	<insert id="joinUser">
+		<selectKey order="AFTER" keyProperty="uno" resultType="long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		
+		INSERT INTO TB_USER(
+			username,
+			password,
+			name,
+			email,
+			deleteYn
+		) VALUES(
+			#{username},
+			#{password},
+			#{name},
+			#{email},
+			false
+		)
+		
+	</insert>
+	
+	<!-- 1-2. 권한 추가 -->
+	<insert id="insertUserAuth">
+		<selectKey order="AFTER" keyProperty="uano" resultType="long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		
+		INSERT INTO TB_USERAUTH(
+			username,
+			role
+		) VALUES(
+			#{username},
+			#{role}
+		)
+		
+	</insert>
+	
+</mapper>
