@@ -43,4 +43,37 @@
 		
 	</insert>
 	
+	<resultMap id="userMap" type="UserVO">
+	 	<id property="uno" column="uno" /> <!-- group by 역할 -->
+	 	<result property="username" column="username" />
+	 	<result property="password" column="password" />
+	 	<result property="name" column="name" />
+	 	<result property="email" column="email" />
+	 	<result property="deleteYn" column="deleteYn" />
+	 	<result property="createDate" column="createDate" />
+	 	<result property="updateDate" column="updateDate" />
+	 	<collection property="roles" resultMap="authMap"></collection>
+	 </resultMap>
+	 
+	 <resultMap id="authMap" type="UserAuthVO">
+	 	<result property="uano" column="uano"/>
+	 	<result property="role" column="role" />
+	 	<result property="username" column="username" />
+	 </resultMap>
+	
+	
+	<!-- 1-3. 사용자 조회 : resultMap을 이용해 userAuth 테이블과 조인해서 데이터 조회 -->
+	<select id="selectUser" resultMap="userMap">
+		SELECT
+			*
+		FROM 
+			tb_user tu 
+				LEFT OUTER JOIN 
+					tb_userauth tua
+					ON
+						tu.username = tua.username
+					WHERE
+						tu.username = #{username};
+	</select>
+	
 </mapper>

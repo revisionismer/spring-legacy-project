@@ -19,9 +19,12 @@ public class UserAuthVO {
 /*
  *- userauth table 생성 -
 CREATE TABLE tb_userAuth(
-	uao INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	uano INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	username VARCHAR(100) NOT NULL,
 	role VARCHAR(50) NOT NULL
 );
+
+ALTER TABLE tb_userauth add constraint fk_auth FOREIGN KEY(username) REFERENCES tb_user(username);
+
  * 
  */
