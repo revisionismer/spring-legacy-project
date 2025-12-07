@@ -5,7 +5,9 @@
 <configuration>
 
 <typeAliases>
+	<package name="com.nexchal.sample.domain"/>
 	<package name="com.nexchal.board.domain"/>
+	<package name="com.nexchal.user.domain"/>
 </typeAliases>
 
 </configuration>

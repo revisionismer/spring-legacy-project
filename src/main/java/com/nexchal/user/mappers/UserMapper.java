@@ -11,5 +11,7 @@ public interface UserMapper {
 	int joinUser(UserVO userVO);
 	
 	int insertUserAuth(UserAuthVO authVO);
+	
+	UserVO selectUser(String username);
 
 }
