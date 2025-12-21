@@ -20,6 +20,13 @@
     <!-- Custom styles for this template-->
     <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
    
+   	<style type="text/css">
+   		
+   		#loginImg {
+   			background-image: url("/resources/img/dog.jpg");	
+   		}
+   		
+   	</style>
 </head>
 <body class="bg-gradient-primary">
 
@@ -33,9 +40,7 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image" style="width: 100%">
-                            	<img id="profileImg" src="/resources/img/undraw_profile.svg" alt="profile-img" style="display: flex; width: 100%; height: 100%; justify-content: center; ">
-                            </div>
+                            <div id="loginImg" class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">

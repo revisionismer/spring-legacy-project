@@ -42,29 +42,20 @@
 		<security:logout success-handler-ref="customLogoutSuccessHandler" />
 	
 	</security:http>
-
+	
+	<!-- 1-6. CustomUserDetailsService class를 bean으로 등록 -->
+	<bean id="customUserDetailsService" class="com.nexchal.config.security.service.CustomUserDetailsService">
+		<!-- 1-8. 기본 생성자 xml에서 생성, mapper 어노테이션으로 이미 userMapper란 이름으로 bean으로 등록 되어 있기 떄문에 가능, 
+		                      경고가 뜨는 이유는 해당 xml파일 안에 userMapper란 id로 등록된 bean이 없어서 그런데 무시하자(버전문제인듯) -->
+		<constructor-arg index="0" ref="userMapper"></constructor-arg>
+	</bean>
+	
 	<!-- 1-2. -->
 	<security:authentication-manager>
 	
 		<!-- 1-5. -->
-		<security:authentication-provider>
-			<!-- 1-6. -->
-			<security:user-service>
-				<!-- 1-7. -->	
-				<security:user 
-					name="user1" 
-					authorities="ROLE_USER" 
-					password="$2a$10$kVUt91KY0di.hcAAlt.E2ekL39raFGw5UuX0oqRt1Zqmlp4HB0I/."/>
-				
-				<!-- 1-8. -->	
-				<security:user 
-					name="admin1" 
-					authorities="ROLE_ADMIN" 
-					password="$2a$10$Zk3Xe./HFEu4EMT7mYCNQeDF/qBzQDjn6OsLPATVFXFejezXW5FA6"/>	
-				
-			</security:user-service>
-		
-		</security:authentication-provider>
+		<!-- 1-7. user-service-ref 속성에 내가 만들어서 bean으로 등록한 UserDetailsService 클래스를 등록 -->
+		<security:authentication-provider user-service-ref="customUserDetailsService" />
 	
 	</security:authentication-manager>
 	
