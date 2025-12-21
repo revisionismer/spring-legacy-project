@@ -49,3 +49,4 @@
 47. 로그인 성공 처리와 로그아웃 성공 처리(CustomLoginHandler, CustomLogoutHandler)
 48. 직접 만드는 커스텀 인증 처리 개요 및 회원 테이블과 데이터 추가
 49. 회원정보 조회 처리(resultMap)
+50. 커스텀 UserDetailsService와 UserDetails 구현 및 로그인 처리 완성
