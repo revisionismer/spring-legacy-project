@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,5 +9,36 @@
 </head>
 <body>
 	<h1>관리자인 사람만(admin)</h1>
+	
+	<div>
+		<sec:authentication property="principal"/>
+	</div>
+	
+	<br><br>
+	
+	<div>
+		<sec:authentication property="principal.userVO"/>
+	</div>
+	
+	<br><br>
+	
+	<div>
+		<sec:authentication property="principal.userVO.uno"/>
+	</div>
+	<div>
+		<sec:authentication property="principal.userVO.username"/>
+	</div>
+	<div>
+		<sec:authentication property="principal.userVO.password"/>
+	</div>
+	<div>
+		<sec:authentication property="principal.userVO.name"/>
+	</div>
+	<div>
+		<sec:authentication property="principal.userVO.email"/>
+	</div>
+	<div>
+		<sec:authentication property="principal.userVO.roles"/>
+	</div>
 </body>
 </html>
