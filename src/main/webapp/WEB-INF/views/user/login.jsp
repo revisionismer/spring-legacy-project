@@ -64,7 +64,8 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" id="customCheck" class="custom-control-input">
+                                            	<!-- 2-9. remember-me 설정 1 : jsp에 Remember-me 관련 체크박스의 name 값을 remember-me로 설정 -->
+                                                <input type="checkbox" id="customCheck" name="remember-me" class="custom-control-input">
                                                 <label class="custom-control-label" for="customCheck">Remember Me</label>
                                             </div>
                                         </div>
