@@ -2,6 +2,7 @@ package com.nexchal.sample.web;
 
 import java.util.Arrays;
 
+// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/sample")
 public class SampleController {
 
+//  1-1. 어노테이션을 이용한 시큐리티 처리(servlet-context.xml에 설정을 추가해 줘야한다. -> security:global-method-security)
+//	@PreAuthorize("permitAll()")  
 	@GetMapping("/basic")
 	public String basic() {
 		log.info("basic------------------------");
