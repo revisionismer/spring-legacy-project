@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@include file="../includes/header.jsp" %>
 
@@ -18,7 +19,6 @@
 	
 		<div class="card-body">
 			
-			<!--  -->
 			<div id="search_condition" style="padding-bottom: 10px">
 				<select name="typeSelect">
 				 	<option value="">--</option>
@@ -92,10 +92,12 @@
     						<li class="page-item"><a class="page-link" href="${pagination.endPage + 1}">Next</a></li>
   						</c:if>
   					</ul>
-  					
-  					<div class="d-sm-flex align-items-center justify-content-end">
-						<button id="boardWriteBtn" class="btn btn-primary mr-2">글쓰기</button>
-					</div>
+  					<!-- 1-1. sec:authorize의 내장 함수 isAuthenticated() : 사용자가 로그인(인증)되어 있는지 확인합니다. 인증된 경우 true 반환. -->
+  					<sec:authorize access="isAuthenticated()">
+  						<div class="d-sm-flex align-items-center justify-content-end">
+							<button id="boardWriteBtn" class="btn btn-primary mr-2">글쓰기</button>
+						</div>
+					</sec:authorize>
 				</div>
 		
 			</div>
@@ -233,7 +235,7 @@
 
 		// 1-3. 위에서 만든 검색조건 배열을 types= 형태로 만들어주기
 		if(arr && arr.length > 0) { // 1-4. 검색 조건이 있다면
-			for(const type of arr) { // 1-5. arr 배열에 있는 값을 type에 넣어주기
+			for(var type of arr) { // 1-5. arr 배열에 있는 값을 type에 넣어주기
 				str += `<input type='hidden' name='types' value=\${type}>`;
 			} 
 		}
