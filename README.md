@@ -52,3 +52,4 @@
 50. 커스텀 UserDetailsService와 UserDetails 구현 및 로그인 처리 완성
 51. 시큐리티 JSP taglib와 자동 로그인(remember-me) 처리
 52. 어노테이션을 이용한 시큐리티 처리
+53. 목록화면과 등록화면에서 시큐리티 처리

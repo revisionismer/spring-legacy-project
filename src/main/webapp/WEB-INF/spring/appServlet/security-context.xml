@@ -35,6 +35,10 @@
 		<security:intercept-url pattern="/sample/user" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
 		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />
 	
+		<security:intercept-url pattern="/board/register" method="GET" access="isAuthenticated()" />
+		<security:intercept-url pattern="/board/register" method="POST" access="isAuthenticated()" />
+
+	
 		<!-- 2-2. 2-1에 등록한 custom403ExceptionHandler 빈을 연결  -->
 		<security:access-denied-handler ref="custom403ExceptionHandler" />
 	
