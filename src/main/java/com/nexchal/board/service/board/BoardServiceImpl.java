@@ -2,6 +2,7 @@ package com.nexchal.board.service.board;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+//	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@PreAuthorize("isAuthenticated()")
 	public BoardVO readBoardOne(Long bno) {
 		return boardMapper.selectBoard(bno);
 	}

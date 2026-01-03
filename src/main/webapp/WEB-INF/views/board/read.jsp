@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@include file="../includes/header.jsp"%>
 
@@ -57,7 +58,13 @@
 				</div>
 
 				<div class="mt-3 d-flex justify-content-end">
-					<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>
+					<!-- 로그인한 사용자와 게시글 작성자가 같을 때만 처리하는 설정 1 -->
+					<sec:authentication property="principal" var="secInfo" />
+					
+					<!-- 로그인한 사용자와 게시글 작성자가 같을 때만 처리하는 설정 2 -->
+					<c:if test="${secInfo.userVO.username == board.writer}">
+						<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>	
+					</c:if>
 					<button type="button" class="btn btn-warning btnBoardList">목록으로</button>
 				</div>
 			</div>
