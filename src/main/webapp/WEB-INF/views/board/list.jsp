@@ -92,12 +92,10 @@
     						<li class="page-item"><a class="page-link" href="${pagination.endPage + 1}">Next</a></li>
   						</c:if>
   					</ul>
-  					<!-- 1-1. sec:authorize의 내장 함수 isAuthenticated() : 사용자가 로그인(인증)되어 있는지 확인합니다. 인증된 경우 true 반환. -->
-  					<sec:authorize access="isAuthenticated()">
-  						<div class="d-sm-flex align-items-center justify-content-end">
-							<button id="boardWriteBtn" class="btn btn-primary mr-2">글쓰기</button>
-						</div>
-					</sec:authorize>
+  					
+  					<div class="d-sm-flex align-items-center justify-content-end">
+						<button id="boardWriteBtn" class="btn btn-primary mr-2">글쓰기</button>
+					</div>
 				</div>
 		
 			</div>

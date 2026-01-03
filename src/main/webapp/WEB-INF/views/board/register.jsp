@@ -37,7 +37,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text">Writer</span>
 						</div>
-						<input type="text" id="writer" name="writer" class="form-control" value="<sec:authentication property="principal.userVO.name"/>" readonly="readonly" />
+						<input type="text" id="writer" name="writer" class="form-control" value="<sec:authentication property="principal.userVO.username"/>" readonly="readonly" />
 					</div>
 					<div class="form-group input-group input-group-lg">
 						<div class="input-group-prepend">
