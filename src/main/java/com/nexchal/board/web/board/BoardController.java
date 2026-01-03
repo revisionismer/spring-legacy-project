@@ -2,7 +2,7 @@ package com.nexchal.board.web.board;
 
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,7 +77,7 @@ public class BoardController {
 	}
 	
 	// 1-3. modify
-	// @GetMapping("/modify/{bno}")
+ // @GetMapping("/modify/{bno}")
 	public String modifyBoardOne(@PathVariable(value = "bno") Long bno, Model model) {
 		log.info("------------boardOne----------");
 		
@@ -117,7 +117,7 @@ public class BoardController {
 	}
 	
 	// 1-6. read와 modify 페이지 컨트롤러 합치기
-	@GetMapping("/{job}/{bno}")
+//	@GetMapping("/{job}/{bno}")
 	public String readAndUpdateView(@PathVariable(value = "job") String job, 
 									@PathVariable(value = "bno") Long bno,
 									@ModelAttribute("cri") Criteria criteria,
@@ -138,6 +138,37 @@ public class BoardController {
 		
 		return "/board/" + job;
 	}
+	
+	// 2-1. read와 update View 분리 1 : read는 xml에서 설정
+	@GetMapping("/read/{bno}")
+	public String readBoardView(@PathVariable(value = "bno") Long bno,
+								@ModelAttribute("cri") Criteria criteria,
+								Model model) {
+		
+		BoardVO boardVO = boardService.readBoardOne(bno);
+		
+		log.info("boardVO : " + boardVO);
+		
+		model.addAttribute("board", boardVO);
+		
+		return "/board/read";
+	}
+	
+	// 2-2. read와 update View 분리 2 : update는 어노테이션으로 설정, @PreAuthorize("isAuthenticated()") : 익명 사용자도 isAuthenticated()는 true를 반환함.
+	@GetMapping("/modify/{bno}")
+	public String updateBoardView(@PathVariable(value = "bno") Long bno,
+								  @ModelAttribute("cri") Criteria criteria,
+								  Model model) {
+		
+		BoardVO boardVO = boardService.readBoardOne(bno);
+		
+		log.info("boardVO : " + boardVO);
+		
+		model.addAttribute("board", boardVO);
+		
+		return "/board/modify";
+	}
+	
 	
 	@PostMapping("/delete/{bno}")
 	public String deleteBookByBno(@PathVariable(value = "bno") Long bno, 
