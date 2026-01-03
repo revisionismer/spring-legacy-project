@@ -30,14 +30,26 @@
 		<!-- 2.4. CSRF(Cross-Site Request Forgery) 토큰 비활성화 : 로그인 페이지 만들기 전 설정 -->
 		<security:csrf disabled="true" />
 		
-		<!-- 1-3. 지정된 url의 경로로 요청이 들어왔을때 어떻게 처리할건지 -->
+		<!-- 1-3. 스프링 시큐리티 인증 설정 1 : Filter 단계(URL 보안) : xml에서 이 설정이 되어 있으면 어노테이션 기반 @PreAuthorize("isAuthenticated()")이 동작 하지 않는다. 
+		                                                                      필터 단에서 이미 인증 로직이 끝나기 때문에 컨트롤러 단에서 검사를 하지 않는다. 
+		                                                                      그래서 어노테이션 기반을 테스터 하고 싶으면  security:intercept-url 설정을 모두 주석 처리 하고 테스트 하자. -->
+		<!-- ex) 실행순서
+				 요청
+ 				 ↓
+				Spring Security Filter (intercept-url)
+ 				 ↓  ← 여기서 이미 인증 체크 끝남
+				Controller
+ 				 ↓
+				Service (@PreAuthorize)
+		 -->		
+		<!-- Filter 기반 시큐리티 적용 : 어노테이션 기반, 필터 기반 같이 쓸 수 있음. 컨트롤러에 @PreAuthorize를 걸지 말고 서비스단에 걸어서 사용하면 된다. -->                                                             
 		<security:intercept-url pattern="/sample/all" access="permitAll()" />
 		<security:intercept-url pattern="/sample/user" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
 		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />
 	
 		<security:intercept-url pattern="/board/register" method="GET" access="isAuthenticated()" />
 		<security:intercept-url pattern="/board/register" method="POST" access="isAuthenticated()" />
-
+ 		    
 	
 		<!-- 2-2. 2-1에 등록한 custom403ExceptionHandler 빈을 연결  -->
 		<security:access-denied-handler ref="custom403ExceptionHandler" />
@@ -84,4 +96,6 @@
 		
 	</security:authentication-manager>
 	
+	<!-- 3-1. 시큐리티 어노테이션 활성화 설정 코드 -->	
+	<security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" /> 
 </beans>
