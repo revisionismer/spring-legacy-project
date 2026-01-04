@@ -16,9 +16,12 @@
 
 	<!-- DataTables Example -->
 	<div class="card shadow mb-4">
-
+	
 		<div class="card-body">
 			<div class="content">
+				<!-- 로그인한 사용자와 게시글 작성자가 같을 때만 처리하는 설정 1 -->
+				<sec:authentication property="principal" var="secInfo" />
+					
 				<div class="input-group input-group-lg">
 					<div class="input-group-prepend">
 						<span class="input-group-text">Bno</span>
@@ -58,13 +61,9 @@
 				</div>
 
 				<div class="mt-3 d-flex justify-content-end">
-					<!-- 로그인한 사용자와 게시글 작성자가 같을 때만 처리하는 설정 1 -->
-					<sec:authentication property="principal" var="secInfo" />
 					
-					<!-- 로그인한 사용자와 게시글 작성자가 같을 때만 처리하는 설정 2 -->
-					<c:if test="${secInfo.userVO.username == board.writer}">
-						<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>	
-					</c:if>
+					<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>	
+					
 					<button type="button" class="btn btn-warning btnBoardList">목록으로</button>
 				</div>
 			</div>
