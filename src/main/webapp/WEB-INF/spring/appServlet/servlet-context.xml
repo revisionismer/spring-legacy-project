@@ -28,7 +28,12 @@
 	<context:component-scan base-package="com.nexchal.util" />
 	
 	<!-- 4-3. MVC : Enables the Spring MVC @Controller programming model -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+		<!-- 6-2. 사용자 정보를 MVC 컨트롤러에 매개변수에서 직접 받을 수 있게 하는 설정 -->
+		<mvc:argument-resolvers>
+			<beans:bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver"></beans:bean>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
 	
 	<!-- 4-4. 뷰 리졸버 설정 : Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -2,6 +2,8 @@ package com.nexchal.board.web.board;
 
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 // import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import com.nexchal.board.domain.BoardVO;
 import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
 import com.nexchal.board.service.board.BoardService;
+import com.nexchal.config.security.service.CustomUserDetails;
 import com.nexchal.util.FileUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -131,8 +134,11 @@ public class BoardController {
 		}
 		
 		BoardVO boardVO = boardService.readBoardOne(bno);
+		log.info("------------boardVO ----------");
 		
 		log.info("boardVO : " + boardVO);
+		
+		log.info("------------boardVO ----------");
 		
 		model.addAttribute("board", boardVO);
 		
@@ -158,11 +164,22 @@ public class BoardController {
 	@GetMapping("/modify/{bno}")
 	public String updateBoardView(@PathVariable(value = "bno") Long bno,
 								  @ModelAttribute("cri") Criteria criteria,
+								  @AuthenticationPrincipal CustomUserDetails customUserDetails,
 								  Model model) {
 		
 		BoardVO boardVO = boardService.readBoardOne(bno);
 		
-		log.info("boardVO : " + boardVO);
+		log.info("------------BoardVO ----------");
+		
+		log.info("boardVO : " + boardVO.toString());
+		
+		log.info("------------BoardVO ----------");
+		
+		log.info("------------UserVO ----------");
+		
+		log.info("customUserDetails : " + customUserDetails.toString());
+		
+		log.info("------------UserVO ----------");
 		
 		model.addAttribute("board", boardVO);
 		
@@ -174,13 +191,30 @@ public class BoardController {
 	public String deleteBookByBno(@PathVariable(value = "bno") Long bno, 
 								  @RequestParam(value = "anos", required = false) Long[] anos,
 								  @RequestParam(value = "fullnames", required = false) String[] fullnames, 
+								  @AuthenticationPrincipal CustomUserDetails customUserDetails,
 								  RedirectAttributes rttr) {
 		
 		BoardVO boardVO = boardService.readBoardOne(bno);
 		boardVO.setDeleteYn(true);
 		
-		log.info("boardVO : " + boardVO);
+		log.info("------------BoardVO ----------");
 		
+		log.info("boardVO : " + boardVO.toString());
+		
+		log.info("------------BoardVO ----------");
+		
+		log.info("------------UserVO ----------");
+		
+		log.info("customUserDetails : " + customUserDetails.toString());
+		
+		log.info("------------UserVO ----------");
+		
+		// 2026-01-04 : 삭제 POST 요청시에 본인 작성 글이 아니면 삭제가 안되게 막아놓는다.(백엔드)
+		if(customUserDetails != null) {
+			if(!customUserDetails.getUsername().equals(boardVO.getWriter())) {
+				throw new AccessDeniedException("게시글 작성자만 삭제할 수 있습니다.");
+			}
+		}
 		boardService.updateBoard(boardVO, anos);  // 기존 : boardService.updateBoard(boardVO, null);
 		
 		// 프론트단에서 삭제될 대상의 파일들을 삭제
@@ -196,6 +230,7 @@ public class BoardController {
 								  @RequestParam(value = "files", required = false) MultipartFile[] files,
 								  @RequestParam(value = "anos", required = false) Long[] anos,
 								  @RequestParam(value = "fullnames", required = false) String[] fullnames,	  
+								  @AuthenticationPrincipal CustomUserDetails customUserDetails,
 								  BoardVO boardVO,
 								  RedirectAttributes rttr) {
 		
@@ -206,9 +241,26 @@ public class BoardController {
 		if(attachFileList != null && attachFileList.size() > 0) {
 			boardVO.setAttachFileList(attachFileList);
 		}
-	
-		log.info("boardVO : " + boardVO);
 		
+		log.info("------------BoardVO ----------");
+		
+		log.info("boardVO : " + boardVO.toString());
+		
+		log.info("------------BoardVO ----------");
+		
+		log.info("------------UserVO ----------");
+		
+		log.info("customUserDetails : " + customUserDetails.toString());
+		
+		log.info("------------UserVO ----------");
+		
+		// 2026-01-04 : 수정 POST 요청시에 본인 작성 글이 아니면 수정이 안되게 막아놓는다.(백엔드)
+		if(customUserDetails != null) {
+			if(!customUserDetails.getUsername().equals(boardVO.getWriter())) {
+				throw new AccessDeniedException("게시글 작성자만 수정할 수 있습니다.");
+			}
+		}
+
 		boardService.updateBoard(boardVO, anos);
 		
 		// 프론트단에서 삭제될 대상의 파일들을 삭제
