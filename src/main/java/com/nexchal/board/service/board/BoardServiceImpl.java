@@ -66,7 +66,12 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectBoard(bno);
 	}
 
+	/*
+	 *  2026-01-10 : @PreAuthorize에서 principal은 내가 구현한 CustomUserDetails에서 뽑아오는게 아니라
+	 *  			 UserDetails 인터페이스에서 직접 뽑아 오기 때문에 여기에 없는 데이터는 가져오지 못한다.
+	 */
 	@Override
+	@PreAuthorize("principal.userVO.username == #boardVO.writer")
 	public boolean updateBoard(BoardVO boardVO, Long[] anos) {
 		
 		int count = boardMapper.updateBoard(boardVO);

@@ -3,7 +3,9 @@ package com.nexchal.board.web.board;
 import java.util.List;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 // import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -225,7 +227,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@PostMapping("/modify/{bno}")
+//	@PostMapping("/modify/{bno}")
 	public String modifyBookByBno(@PathVariable(value = "bno") Long bno, 
 								  @RequestParam(value = "files", required = false) MultipartFile[] files,
 								  @RequestParam(value = "anos", required = false) Long[] anos,
@@ -271,4 +273,60 @@ public class BoardController {
 		
 		return "redirect:/board/read/" + bno;
 	}
+	
+	@PostMapping("/modify/{bno}")
+	public String modifyBookUsingPreAuthorize(
+								  @PathVariable(value = "bno") Long bno, 
+								  @RequestParam(value = "files", required = false) MultipartFile[] files,
+								  @RequestParam(value = "anos", required = false) Long[] anos,
+								  @RequestParam(value = "fullnames", required = false) String[] fullnames,	  
+								  @AuthenticationPrincipal CustomUserDetails customUserDetails,
+								  BoardVO boardVO,
+								  RedirectAttributes rttr) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		log.info("Principal: " + auth.getPrincipal());
+		log.info("boardVO writer : " + boardVO.getWriter());
+		
+		boardVO.setBno(bno);
+		
+		List<AttachFileVO> attachFileList = fileUtil.upload(files);
+		
+		if(attachFileList != null && attachFileList.size() > 0) {
+			boardVO.setAttachFileList(attachFileList);
+		}
+		
+		log.info("------------BoardVO ----------");
+		
+		log.info("boardVO : " + boardVO.toString());
+		
+		log.info("------------BoardVO ----------");
+		
+		log.info("------------UserVO ----------");
+		
+		log.info("customUserDetails : " + customUserDetails.toString());
+		
+		log.info("------------UserVO ----------");
+		
+		// 2026-01-04 : 수정 POST 요청시에 본인 작성 글이 아니면 수정이 안되게 막아놓는다.(백엔드)
+		if(customUserDetails != null) {
+			if(!customUserDetails.getUsername().equals(boardVO.getWriter())) {
+				throw new AccessDeniedException("게시글 작성자만 수정할 수 있습니다.");
+			}
+		}
+
+		boardService.updateBoard(boardVO, anos);
+		
+		// 프론트단에서 삭제될 대상의 파일들을 삭제
+		fileUtil.deleteFiles(fullnames);
+		
+		
+		rttr.addFlashAttribute("result", boardVO.getBno());
+		
+		return "redirect:/board/read/" + bno;
+	}
+	
+	
+	
 }
