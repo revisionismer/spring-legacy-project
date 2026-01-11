@@ -321,12 +321,8 @@ public class BoardController {
 		// 프론트단에서 삭제될 대상의 파일들을 삭제
 		fileUtil.deleteFiles(fullnames);
 		
-		
 		rttr.addFlashAttribute("result", boardVO.getBno());
 		
 		return "redirect:/board/read/" + bno;
 	}
-	
-	
-	
 }
