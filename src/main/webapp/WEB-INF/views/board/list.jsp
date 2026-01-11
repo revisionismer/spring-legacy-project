@@ -248,7 +248,17 @@
 		
 		actionForm.submit();
 		
-	})
+	});
+	
+	// 2026-01-11 : 검색 버튼 엔터키에도 동작하게 변경 -> 엔터는 포커스가 있는 요소에서만 발생하기 때문에 검색 버튼에 이벤트를 거는게 아니라 input text 쪽에 건다.
+	document.querySelector("input[name='keywordInput']").addEventListener("keydown", function(e) {
+		if (e.key === "Enter") {
+			e.preventDefault();   
+			e.stopPropagation();
+			
+		    document.querySelector(".searchBtn").click();
+		}
+	});
 	
 	
 </script>
