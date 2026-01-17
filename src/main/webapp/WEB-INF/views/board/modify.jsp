@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@include file="../includes/header.jsp"%>
 
@@ -67,8 +68,12 @@
 					</div>
 				
 					<div class="mt-3 d-flex justify-content-end">
-						<button type="button" class="btn btn-info mr-2 btnBoardModify">수정하기</button>
-						<button type="button" class="btn btn-danger mr-2 btnBoardDelete">삭제하기</button>
+						<!-- 2026-01-17 : 본인이 작성한 글이 아닐 경우 수정,삭제 버튼 감추기 -->
+						<sec:authorize access="principal.username != '${board.writer}'">
+							<button type="button" class="btn btn-info mr-2 btnBoardModify">수정하기</button>
+							<button type="button" class="btn btn-danger mr-2 btnBoardDelete">삭제하기</button>
+						</sec:authorize>
+						
 						<button type="button" class="btn btn-warning btnBoardList">목록으로</button>
 					</div>
 					
