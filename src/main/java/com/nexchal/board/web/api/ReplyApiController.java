@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +22,13 @@ import com.nexchal.board.domain.ReplyVO;
 import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
 import com.nexchal.board.service.reply.ReplyService;
+import com.nexchal.board.web.dto.ResponseDto;
+import com.nexchal.config.security.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+// @PreAuthorize(value = "isAuthenticated()")  // 2026-01-17 : 로그인한 이용자는 접근 불가(옛날 방식)
 @RestController
 @RequestMapping("/api/replies")
 @RequiredArgsConstructor
@@ -31,7 +38,13 @@ public class ReplyApiController {
 	private final ReplyService replyService;
 	
 	@PostMapping("/register")
-	public Map<String, Object> registerReply(@RequestBody ReplyVO replyVO) {
+	public ResponseEntity<?> registerReply(
+						@RequestBody ReplyVO replyVO,
+						@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+		
+		if(customUserDetails == null) {
+			return new ResponseEntity<>(new ResponseDto<>(-1, "로그인한 회원만 댓글을 작성할 수 있습니다.", null), HttpStatus.UNAUTHORIZED);
+		}
 		
 		Map<String, Object> result = new HashMap<>();
 		
@@ -44,7 +57,7 @@ public class ReplyApiController {
 		result.put("rno", rno);
 		result.put("replyCount", replyCount);
 		
-		return result;
+		return new ResponseEntity<>(new ResponseDto<>(1, "댓글 작성하기 성공", result), HttpStatus.OK);
 		
 	}
 	

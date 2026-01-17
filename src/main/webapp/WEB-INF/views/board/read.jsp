@@ -61,8 +61,10 @@
 				</div>
 
 				<div class="mt-3 d-flex justify-content-end">
-					
-					<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>	
+					<!-- 2026-01-17 : 본인이 작성한 글이 아닐 경우 수정하기 하면으로 가는 버튼 안보이게 처리 -->
+					<sec:authorize access="principal.username != '${board.writer}'">
+						<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>	
+					</sec:authorize>
 					
 					<button type="button" class="btn btn-warning btnBoardList">목록으로</button>
 				</div>
@@ -91,7 +93,7 @@
         		<h5 class="card-header">Comment</h5>
         		<div class="card-body">
             		<form id="commentForm">
-            			<input type="hidden" id="username" name="username" value="관리자" />
+            			<input type="hidden" id="username" name="username" value='<sec:authentication property="principal.username"/>' />
             			<input type="hidden" id="bno" name="bno" value="${board.bno}" />
             			<div class="form-group">
             				<textarea id="comment-contents" class="form-control" rows="3"></textarea>
@@ -198,13 +200,13 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text">Replyer</span>
 						</div>
-						<input type="text" name="v_replyer" class="form-control" />
+						<input type="text" name="v_replyer" class="form-control" value="" />
 					</div>
 					<div class="input-group input-group-sm">
 						<div class="input-group-prepend">
 							<span class="input-group-text">Reply Title</span>
 						</div>
-						<input type="text" name="v_replyTitle" class="form-control"/>
+						<input type="text" name="v_replyTitle" class="form-control" value="" />
 					</div>
 					<div class="input-group input-group-sm">
 						<div class="input-group-prepend">
@@ -249,6 +251,8 @@
 	const actionForm = document.querySelector("#actionForm");
 	const bno = '${board.bno}';
 	
+	const currentUser = '<sec:authentication property="principal.username"/>';
+	
 	document.querySelector(".btnBoardList").addEventListener('click', function(e) {
 		// form submit 방지
 		e.preventDefault();
@@ -260,18 +264,24 @@
 		actionForm.submit();	
 	}, false);
 	
-	document.querySelector(".btnBoardModifyView").addEventListener('click', function(e) {
-		// form submit 방지
-		e.preventDefault();
+	// 2026-01-17 : 시큐리티 처리로 버튼이 안 보일때는 querySelector로 해당 요소를 찾지 못하기 때문에 뜨는 에러때문에 분기 처리
+	const modifyBtn = document.querySelector(".btnBoardModifyView");
+	
+	if(modifyBtn) {
 		
-		// 전파 방지
-		e.stopPropagation();
-		
-//		window.location.href = "/board/modify/${board.bno}";
-		actionForm.setAttribute("action", `/board/modify/\${bno}`);
-		actionForm.submit();
-		
-	}, false);
+		modifyBtn.addEventListener('click', function(e) {
+			// form submit 방지
+			e.preventDefault();
+			
+			// 전파 방지
+			e.stopPropagation();
+			
+//			window.location.href = "/board/modify/${board.bno}";
+			actionForm.setAttribute("action", `/board/modify/\${bno}`);
+			actionForm.submit();
+			
+		}, false);
+	}
 	
 	/*
 		// ajax 양식(GET)
@@ -376,7 +386,7 @@
 					<div class="media-body">
 						<!--"작성자 이름  날짜" 및 내용 출력-->
 						<div id="comment_writer" class="mt-0">
-							<h5>\${replies[i].writer} &nbsp;&nbsp;</h5><small class="text-muted">2025-09-14</small>
+							<h5>\${replies[i].writer} &nbsp;&nbsp;</h5><small class="text-muted">\${replies[i].createDate}</small>
 						</div>
 						<div id="comment_content">
 							<p>\${replies[i].content}</p>
@@ -454,7 +464,6 @@
 		
 	}, false);
 	
-	// 댓글 모달  : 8분 56초
 	const replyAddModal = new bootstrap.Modal(document.querySelector('#replyAddModal'));
 	const replyViewModal = new bootstrap.Modal(document.querySelector('#replyViewModal'));
 	
@@ -463,6 +472,11 @@
 	const replyContentInput = document.querySelector("textarea[name='replyContent']");
 	
 	document.querySelector("#comment-contents").addEventListener('click', function(e) {
+		
+		// 2026-01-17 : 답글 모달창에 현재 로그인한 유저로 댓글 작성자로 넣기.
+		replyerInput.value = currentUser;
+		replyerInput.setAttribute("readonly", true);
+		
 		replyAddModal.show();
 	}, false);
 	
@@ -585,7 +599,17 @@
 		e.preventDefault();
 		e.stopPropagation();
 		
-		var rno = e.target.getAttribute("data-rno");
+		// 2026-01-17 : e.target.closest : 클릭한 요소부터 시작해서 부모로 쭉 올라가면서 data-rno 가진 가장 가까운 조상을 찾아라
+		var item = e.target.closest("[data-rno]");
+		
+		// 2026-01-17 : 댓글 영역 아닌 곳 클릭했을땐 패스
+		if (!item) 
+			return;  
+		
+		var rno = item.getAttribute("data-rno");
+		
+		// 2026-01-17 : 지금 클릭한 그 요소 하나만 본다는 뜻 -> 그래서 버튼쪽을 클릭했을땐 정상 동작하는데 내용쪽을 클릭했을땐 데이터를 못가져온다.
+//		var rno = e.target.getAttribute("data-rno");
 		// 현재 댓글 페이지 번호 : replyPageNum
 		
 		console.log("rno: " + rno);
