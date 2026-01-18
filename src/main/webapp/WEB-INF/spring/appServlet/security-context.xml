@@ -9,13 +9,13 @@
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 	
 	<!-- 2-1. custom403ExceptionHandler 빈으로 등록 -->
-	<bean id="custom403ExceptionHandler" class="com.nexchal.config.security.handler.Custom403ExceptionHandler" />
+	<bean id="custom403ExceptionHandler" class="com.nexchal.security.handler.Custom403ExceptionHandler" />
 	
 	<!-- 2-5. customLoginSuccessHandler 빈으로 등록 -->
-	<bean id="customLoginSuccessHandler" class="com.nexchal.config.security.handler.CustomLoginSuccessHandler"/>
+	<bean id="customLoginSuccessHandler" class="com.nexchal.security.handler.CustomLoginSuccessHandler"/>
 		
 	<!-- 2-7. CustomLogoutSuccessHandler 빈으로 등록 -->
-	<bean id="customLogoutSuccessHandler" class="com.nexchal.config.security.handler.CustomLogoutSuccessHandler"/>
+	<bean id="customLogoutSuccessHandler" class="com.nexchal.security.handler.CustomLogoutSuccessHandler"/>
 		
 	<!-- 1-1. security:http 설정이 안되어 있을때 no bean 관련 에러가 터지니 시큐리티 의존성 추가후 반드시 작성 -->
 	<security:http>
@@ -78,7 +78,7 @@
 	</bean>
 	
 	<!-- 1-6. CustomUserDetailsService class를 bean으로 등록 -->
-	<bean id="customUserDetailsService" name="customUserDetailsService" class="com.nexchal.config.security.service.CustomUserDetailsService">
+	<bean id="customUserDetailsService" name="customUserDetailsService" class="com.nexchal.security.service.CustomUserDetailsService">
 		<!-- 1-8. 기본 생성자 xml에서 생성, mapper 어노테이션으로 이미 userMapper란 이름으로 bean으로 등록 되어 있기 떄문에 가능, 
 		                      경고가 뜨는 이유는 해당 xml파일 안에 userMapper란 id로 등록된 bean이 없어서 그런데 무시하자(버전문제인듯) -->
 		<constructor-arg index="0" ref="userMapper"></constructor-arg>

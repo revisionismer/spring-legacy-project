@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.nexchal.config.security.constant.UserEnum;
+import com.nexchal.security.constant.UserEnum;
 import com.nexchal.user.domain.UserAuthVO;
 import com.nexchal.user.domain.UserVO;
 import com.nexchal.user.mappers.UserMapper;

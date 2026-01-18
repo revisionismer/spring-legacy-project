@@ -1,4 +1,4 @@
-package com.nexchal.config.security.constant;
+package com.nexchal.security.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
