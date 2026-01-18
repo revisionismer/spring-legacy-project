@@ -1,4 +1,4 @@
-package com.nexchal.config.security.handler;
+package com.nexchal.security.handler;
 
 import java.io.IOException;
 
