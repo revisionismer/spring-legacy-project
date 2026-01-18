@@ -18,6 +18,7 @@
 	<div class="card shadow mb-4">
 	
 		<div class="card-body">
+			<input type="hidden" id="principal" value="${principal != null ? principal.username : ''}" />
 			
 			<div id="search_condition" style="padding-bottom: 10px">
 				<select name="typeSelect">
@@ -134,6 +135,9 @@
 	$("select[name='typeSelect']").css('height', '28px');
 	
 	const result = '${result}';
+	
+	// 2026-01-18 : principal은 서버(SecurityContext)에만 있는 객체라서 JS에서 직접 참조 불가, 아래처럼 사용하거나 jsp안에서 sec 태그 안에서 사용해야 동작
+	const currentUser = '<sec:authentication property="principal.username"/>';
 	
 	const myModal = new bootstrap.Modal(document.getElementById('myModal'));
 	

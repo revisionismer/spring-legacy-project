@@ -23,7 +23,7 @@ import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
 import com.nexchal.board.service.reply.ReplyService;
 import com.nexchal.board.web.dto.ResponseDto;
-import com.nexchal.config.security.service.CustomUserDetails;
+import com.nexchal.security.service.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

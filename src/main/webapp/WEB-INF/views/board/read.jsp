@@ -61,8 +61,8 @@
 				</div>
 
 				<div class="mt-3 d-flex justify-content-end">
-					<!-- 2026-01-17 : 본인이 작성한 글이 아닐 경우 수정하기 하면으로 가는 버튼 안보이게 처리 -->
-					<sec:authorize access="principal.username != '${board.writer}'">
+					<!-- 2026-01-17 : 본인이 작성한 글인 경우만 수정하기 화면으로 가는 버튼 활성화 -->
+					<sec:authorize access="principal.username == '${board.writer}'">
 						<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>	
 					</sec:authorize>
 					
@@ -251,6 +251,7 @@
 	const actionForm = document.querySelector("#actionForm");
 	const bno = '${board.bno}';
 	
+	// 2026-01-18 : principal은 서버(SecurityContext)에만 있는 객체라서 JS에서 직접 참조 불가, 아래처럼 사용하거나 jsp안에서 sec 태그 안에서 사용해야 동작
 	const currentUser = '<sec:authentication property="principal.username"/>';
 	
 	document.querySelector(".btnBoardList").addEventListener('click', function(e) {

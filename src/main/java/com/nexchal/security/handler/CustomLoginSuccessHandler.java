@@ -1,4 +1,4 @@
-package com.nexchal.config.security.handler;
+package com.nexchal.security.handler;
 	
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-	
-import com.nexchal.config.security.constant.UserEnum;
+
+import com.nexchal.security.constant.UserEnum;
 
 import lombok.extern.log4j.Log4j2;
 	

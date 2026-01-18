@@ -23,7 +23,7 @@ import com.nexchal.board.domain.BoardVO;
 import com.nexchal.board.domain.paging.Criteria;
 import com.nexchal.board.domain.paging.Pagination;
 import com.nexchal.board.service.board.BoardService;
-import com.nexchal.config.security.service.CustomUserDetails;
+import com.nexchal.security.service.CustomUserDetails;
 import com.nexchal.util.FileUtil;
 
 import lombok.RequiredArgsConstructor;

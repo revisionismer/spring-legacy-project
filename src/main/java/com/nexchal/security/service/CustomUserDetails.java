@@ -1,4 +1,4 @@
-package com.nexchal.config.security.service;
+package com.nexchal.security.service;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
