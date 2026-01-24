@@ -71,7 +71,7 @@ public class BoardServiceImpl implements BoardService {
 	 *  			 UserDetails 인터페이스에서 직접 뽑아 오기 때문에 여기에 없는 데이터는 가져오지 못한다.
 	 */
 	@Override
-	@PreAuthorize("principal.userVO.username == #boardVO.writer")
+	@PreAuthorize("principal.userVO.username == #boardVO.writer OR hasAuthority('ROLE_ADMIN')") // 2026-01-24 : hasRole('ADMIN') : 특정 역할이 있는지 (ROLE_ 접두사 자동 처리), hasAuthority('ROLE_ADMIN') : 직관성을 위해 두번째꺼 적용.
 	public boolean updateBoard(BoardVO boardVO, Long[] anos) {
 		
 		int count = boardMapper.updateBoard(boardVO);
