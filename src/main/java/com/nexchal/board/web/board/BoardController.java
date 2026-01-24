@@ -289,8 +289,6 @@ public class BoardController {
 		log.info("Principal: " + auth.getPrincipal());
 		log.info("boardVO writer : " + boardVO.getWriter());
 		
-		boardVO.setBno(bno);
-		
 		List<AttachFileVO> attachFileList = fileUtil.upload(files);
 		
 		if(attachFileList != null && attachFileList.size() > 0) {
@@ -309,19 +307,30 @@ public class BoardController {
 		
 		log.info("------------UserVO ----------");
 		
-		// 2026-01-04 : 수정 POST 요청시에 본인 작성 글이 아니면 수정이 안되게 막아놓는다.(백엔드)
-		if(customUserDetails != null) {
-			if(!customUserDetails.getUsername().equals(boardVO.getWriter())) {
-				throw new AccessDeniedException("게시글 작성자만 수정할 수 있습니다.");
-			}
+		// 2026-01-24 : 파라미터로 넘어온 bno로 DB에서 실제 boardVO를 가져온다. (실제 DB에서 가져온 board에 update될 정보를 셋팅)
+		BoardVO oriBoardVO = boardService.readBoardOne(bno);
+		oriBoardVO.setTitle(boardVO.getTitle());
+		oriBoardVO.setContent(boardVO.getContent());
+		
+		// 2026-01-24 : 파라미터로 넘어오는 boardVO가 변질 될 수도 있어서 Pathvariable로 넘어오는 bno로 
+		// 2026-01-04 : 수정 POST 요청시에 본인 작성 글이 아니면 수정이 안되게 막아놓는다.(백엔드) 1
+		// 2026-01-24 : 수정 POST 요청시에 본인 작성 글이며 관리자 권한이 없는 사용자는 수정이 안되게 막아놓는다.(백엔드) 2 
+		boolean isWriter = customUserDetails.getUsername().equals(oriBoardVO.getWriter());
+		boolean isAdmin = customUserDetails.getAuthorities()
+										   .stream()
+										   .anyMatch( a-> a.getAuthority().equals("ROLE_ADMIN"));
+				
+		// 2026-01-24 : 작성자도 아니고, 관리자도 아니면 차단
+		if (!isWriter && !isAdmin) {
+			throw new AccessDeniedException("게시글 작성자나 관리자 권한이 있는 계정만 수정할 수 있습니다.");
 		}
-
-		boardService.updateBoard(boardVO, anos);
+	
+		boardService.updateBoard(oriBoardVO, anos);
 		
 		// 프론트단에서 삭제될 대상의 파일들을 삭제
 		fileUtil.deleteFiles(fullnames);
 		
-		rttr.addFlashAttribute("result", boardVO.getBno());
+		rttr.addFlashAttribute("result", oriBoardVO.getBno());
 		
 		return "redirect:/board/read/" + bno;
 	}
