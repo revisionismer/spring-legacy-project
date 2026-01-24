@@ -16,8 +16,11 @@
 
 	<!-- DataTables Example -->
 	<div class="card shadow mb-4">
-	
 		<div class="card-body">
+			<sec:authorize access="isAuthenticated()">
+    			<input type="hidden" id="loginUser" name="loginUser" value="<sec:authentication property='principal.username'/>">
+				<input type="hidden" id="loginRoles" name="loginRoles" value="<sec:authentication property='principal.authorities'/>">
+			</sec:authorize>
 			<div class="content">
 				<!-- 로그인한 사용자와 게시글 작성자가 같을 때만 처리하는 설정 1 -->
 				<sec:authentication property="principal" var="secInfo" />
@@ -62,7 +65,7 @@
 
 				<div class="mt-3 d-flex justify-content-end">
 					<!-- 2026-01-17 : 본인이 작성한 글인 경우만 수정하기 화면으로 가는 버튼 활성화 -->
-					<sec:authorize access="principal.username == '${board.writer}'">
+					<sec:authorize access="principal.username == '${board.writer}' OR hasRole('ROLE_ADMIN')">
 						<button type="button" class="btn btn-info mr-2 btnBoardModifyView">수정</button>	
 					</sec:authorize>
 					
@@ -251,8 +254,17 @@
 	const actionForm = document.querySelector("#actionForm");
 	const bno = '${board.bno}';
 	
-	// 2026-01-18 : principal은 서버(SecurityContext)에만 있는 객체라서 JS에서 직접 참조 불가, 아래처럼 사용하거나 jsp안에서 sec 태그 안에서 사용해야 동작
-	const currentUser = '<sec:authentication property="principal.username"/>';
+	// 2026-01-18 : principal은 서버(SecurityContext)에만 있는 객체라서 JS에서 직접 참조 불가, 아래처럼 사용하거나 jsp안에서 sec 태그 안에서 사용해야 동작(비추천)
+//	const currentUser = '<sec:authentication property="principal.username"/>';
+	
+	// 2026-01-24 : loginUser라는 input은 로그인을 안하면 보이지 않음.
+	const loginUserEl = document.querySelector('#loginUser');
+	const currentUser = loginUserEl ? loginUserEl.value : null;
+	
+	const loginUserRolesEl = document.querySelector('#loginRoles');
+	
+	// 2026-01-24 : 권한은 배열 형태이므로 이렇게 가져온다.
+	const currentUserRoles = loginUserRolesEl ? loginUserRolesEl.value.split(',') : [];
 	
 	document.querySelector(".btnBoardList").addEventListener('click', function(e) {
 		// form submit 방지
@@ -620,9 +632,6 @@
 		
 		replyViewModal.show();
 		
-		const replyModiBtn = document.querySelector("#replyModiBtn");
-		const replyDelBtn = document.querySelector("#replyDelBtn");
-		
 		var url = `/api/replies/\${rno}`;
 		
 		// 2025-10-07 : 댓글 삭제까지 완료, 수정 부터 다시
@@ -691,6 +700,10 @@
 		const replyerInput = document.querySelector("input[name='v_replyer']");
 		const replyTitleInput = document.querySelector("input[name='v_replyTitle']");
 		const replyContentInput = document.querySelector("textarea[name='v_replyContent']");
+	
+		// 2026-01-24 : 댓글 모달창 시큐리티 적용
+		const replyModiBtn = document.querySelector("#replyModiBtn");
+		const replyDelBtn = document.querySelector("#replyDelBtn");
 		
 		var url = `/api/replies/\${rno}`;
 		
@@ -706,6 +719,15 @@
 				replyTitleInput.value = res.replyVO.title;
 				replyContentInput.value = res.replyVO.content;
 				
+				/* 2026-01-24 : 로그인 유저와 작성자 비교 후 버튼 표시/숨김 1 */
+	            if(currentUser === res.replyVO.writer || currentUserRoles.includes("ROLE_ADMIN")) {
+	                replyModiBtn.style.display = 'inline-block';
+	                replyDelBtn.style.display = 'inline-block';
+	            } else {
+	                replyModiBtn.style.display = 'none';
+	                replyDelBtn.style.display = 'none';
+	            }
+	
 			},
 			error: function(res) {
 				console.log(res);

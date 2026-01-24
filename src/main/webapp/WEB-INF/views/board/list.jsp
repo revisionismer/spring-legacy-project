@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@include file="../includes/header.jsp" %>
 
@@ -17,8 +18,10 @@
 	<div class="card shadow mb-4">
 	
 		<div class="card-body">
-			<input type="hidden" id="principal" value="${principal != null ? principal.username : ''}" />
-			
+			<sec:authorize access="isAuthenticated()">
+    			<input type="hidden" id="loginUser" name="loginUser" value="<sec:authentication property='principal.username'/>">
+				<input type="hidden" id="loginRoles" name="loginRoles" value="<sec:authentication property='principal.authorities'/>">
+			</sec:authorize>
 			<div id="search_condition" style="padding-bottom: 10px">
 				<select name="typeSelect">
 				 	<option value="">--</option>
@@ -138,7 +141,12 @@
 	// 2026-01-18 : principal은 서버(SecurityContext)에만 있는 객체라서 JS에서 직접 참조 불가, 아래처럼 사용하거나 jsp안에서 sec 태그 안에서 사용해야 동작
 	// 2026-01-19 : 컨트롤러에서 인증 객체를 이쪽으로 보내지 않는다면 아래 코드를 사용하면 안된다. null일경우 ERR_INCOMPLETE_CHUNNKED_ENCODING 200 에러가 뜬다.
 	// 2026-01-19 : taglib sec도 마찬가지
-//	const currentUser = '<sec:authentication property="principal.username"/>';
+
+	// 2026-01-24 : El = Element(Dom 요소)
+	const loginUserEl = document.querySelector('#loginUser');
+	
+	// 2026-01-24 : loginUser라는 input은 로그인을 안하면 보이지 않음.
+	const currentUser = loginUserEl ? loginUserEl.value : null;
 	
 	const myModal = new bootstrap.Modal(document.getElementById('myModal'));
 	
