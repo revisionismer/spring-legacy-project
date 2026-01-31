@@ -162,7 +162,6 @@ public class ReplyApiController {
 		return new ResponseEntity<>(new ResponseDto<>(1, "댓글 작성하기 성공", null), HttpStatus.OK); 
 	}
 		
-	
 //	@GetMapping("/list/{bno}")
 	public Map<String, Object> getReplyListOfBoardV1(Criteria criteria, @PathVariable("bno") Long bno) {
 		
@@ -183,6 +182,8 @@ public class ReplyApiController {
 		return result;
 	}
 	
+
+	//  2026-01-31 : ResponseEntity를 사용하면 ResponseDto로 묶어서 보내기 떄문에 프론트 단에서 ajax에서 꺼내 쓸때 data.pagination 이렇게 앞에 data를 붙여줘야된다.
 	@GetMapping("/list/{bno}")
 	public ResponseEntity<?> getReplyListOfBoardV2(Criteria criteria, 
 												   @PathVariable("bno") Long bno,
