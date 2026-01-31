@@ -163,7 +163,7 @@ public class ReplyApiController {
 	}
 		
 	
-	@GetMapping("/list/{bno}")
+//	@GetMapping("/list/{bno}")
 	public Map<String, Object> getReplyListOfBoardV1(Criteria criteria, @PathVariable("bno") Long bno) {
 		
 		log.info("bno : " + bno);
