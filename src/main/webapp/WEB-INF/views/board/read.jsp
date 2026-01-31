@@ -361,18 +361,25 @@
 			success: function(res) {
 				console.log(res);
 				
-				const pagination = res.pagination;
-				const replies = res.replies;
-				
+				// 2026-01-31 : ResponseEntity 안쓸때
+//				const pagination = res.pagination;
+//				const replies = res.replies;
+
+				// 2026-01-31 : ResponseEntity 쓸때
+				const pagination = res.data.pagination;
+				const replies = res.data.replies;
+
 				currentReplyPageNum = pagination.criteria.pageNum;
 				
 				printReplyList(pagination, replies);
 				
 				// 2025-10-01 : 여기까지.
 				if(replies.length == 10) {
-					replyPageNum = res.pagination.endPage + 1; 
+//					replyPageNum = res.pagination.endPage + 1; 
+					replyPageNum = res.data.pagination.endPage + 1; 
 				} else {
-					replyPageNum = res.pagination.endPage; 
+//					replyPageNum = res.pagination.endPage; 
+					replyPageNum = res.data.pagination.endPage; 
 				}
 				
 				
