@@ -379,6 +379,8 @@
 			},
 			error: function(res) {
 				console.log(res);
+				
+				alert(res.message);
 			}
 		});	
 	}
