@@ -246,7 +246,7 @@
 
 		// 1-3. 위에서 만든 검색조건 배열을 types= 형태로 만들어주기
 		if(arr && arr.length > 0) { // 1-4. 검색 조건이 있다면
-			for(var type of arr) { // 1-5. arr 배열에 있는 값을 type에 넣어주기
+			for(var i = 0; i < arr.length; i++) { // 1-5. arr 배열에 있는 값을 type에 넣어주기  // 2026-01-31 : var type of arr 이 표현은 ES6 (ES2015) 문법 구 버전에선 인식이 안됨 그래서 수정
 				str += `<input type='hidden' name='types' value=\${type}>`;
 			} 
 		}

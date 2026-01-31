@@ -24,6 +24,7 @@ import com.nexchal.board.domain.paging.Pagination;
 import com.nexchal.board.service.reply.ReplyService;
 import com.nexchal.board.web.dto.ResponseDto;
 import com.nexchal.security.service.CustomUserDetails;
+import com.nexchal.user.domain.UserVO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -38,9 +39,8 @@ public class ReplyApiController {
 	private final ReplyService replyService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> registerReply(
-						@RequestBody ReplyVO replyVO,
-						@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+	public ResponseEntity<?> registerReply(@RequestBody ReplyVO replyVO,
+										   @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 		
 		if(customUserDetails == null) {
 			return new ResponseEntity<>(new ResponseDto<>(-1, "로그인한 회원만 댓글을 작성할 수 있습니다.", null), HttpStatus.UNAUTHORIZED);
@@ -76,8 +76,8 @@ public class ReplyApiController {
 		
 	}
 	
-	@DeleteMapping("/{rno}")
-	public Map<String, Object> deleteReplyOneByRno(@PathVariable("rno") Long rno) {
+//	@DeleteMapping("/{rno}")
+	public Map<String, Object> deleteReplyOneV1(@PathVariable("rno") Long rno) {
 		
 		Map<String, Object> result = new HashMap<>();
 		
@@ -96,9 +96,39 @@ public class ReplyApiController {
 		
 	}
 	
-	@PutMapping("/{rno}")
-	public Map<String, Object> modifyReplyOne(@PathVariable("rno") Long rno, 
-											  @RequestBody ReplyVO replyVO) {
+	@DeleteMapping("/{rno}")
+	public ResponseEntity<?> deleteReplyOneV2(@PathVariable("rno") Long rno, 
+			  								  @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+		
+		try {
+			checkAuthor(rno, customUserDetails.getUserVO());
+		} catch (Exception e) {
+			Map<String, Object> errorMap = new HashMap<>();
+			
+			errorMap.put("status", 403);
+			
+			return new ResponseEntity<>(new ResponseDto<>(-1, "작성자만 삭제가 가능합니다.", errorMap), HttpStatus.FORBIDDEN);  
+		}
+		
+		Map<String, Object> result = new HashMap<>();
+		
+		ReplyVO replyVO = replyService.getReply(rno);
+		replyVO.setDeleteYn(true);
+		
+		log.info("replyVO : " + replyVO);
+		
+		replyService.modifyReply(replyVO);
+		
+		ReplyVO deletedReplyVO = replyService.getReply(replyVO.getRno());
+		
+		result.put("replyVO", deletedReplyVO);
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, "댓글 삭제하기 성공", null), HttpStatus.OK); 
+	}
+	
+//	@PutMapping("/{rno}")
+	public Map<String, Object> modifyReplyOneV1(@PathVariable("rno") Long rno, 
+											    @RequestBody ReplyVO replyVO) {
 		
 		Map<String, Object> result = new HashMap<>();
 		
@@ -114,8 +144,27 @@ public class ReplyApiController {
 		return result;
 	}
 	
+	@PutMapping("/{rno}")
+	public ResponseEntity<?> modifyReplyOneV2(@PathVariable("rno") Long rno, 
+			  								  @RequestBody ReplyVO replyVO,
+			  								  @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+		
+		try {
+			checkAuthor(rno, customUserDetails.getUserVO());
+		} catch (Exception e) {
+			Map<String, Object> errorMap = new HashMap<>();
+			
+			errorMap.put("status", 403);
+			
+			return new ResponseEntity<>(new ResponseDto<>(-1, "작성자만 수정이 가능합니다.", errorMap), HttpStatus.FORBIDDEN);  
+		}
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, "댓글 작성하기 성공", null), HttpStatus.OK); 
+	}
+		
+	
 	@GetMapping("/list/{bno}")
-	public Map<String, Object> getReplyListOfBoard(Criteria criteria, @PathVariable("bno") Long bno) {
+	public Map<String, Object> getReplyListOfBoardV1(Criteria criteria, @PathVariable("bno") Long bno) {
 		
 		log.info("bno : " + bno);
 		log.info("criteria : " + criteria);
@@ -132,6 +181,56 @@ public class ReplyApiController {
 		result.put("pagination", pagination);
 		
 		return result;
+	}
+	
+	@GetMapping("/list/{bno}")
+	public ResponseEntity<?> getReplyListOfBoardV2(Criteria criteria, 
+												   @PathVariable("bno") Long bno,
+												   @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+		
+		if(customUserDetails.getUserVO() == null) {
+			Map<String, Object> errorMap = new HashMap<>();
+			
+			errorMap.put("status", 403);
+			
+			return new ResponseEntity<>(new ResponseDto<>(-1, "비회원은 이용할 수 없습니다.", errorMap), HttpStatus.FORBIDDEN);  
+		}
+		
+		log.info("bno : " + bno);
+		log.info("criteria : " + criteria);
+		
+		Map<String, Object> result = new HashMap<>();
+		
+		List<ReplyVO> replies = replyService.getRelpyListWithBno(criteria, bno);
+	
+		int totalCount = replyService.getTotalReplyWithBno(criteria, bno);
+		
+		Pagination pagination = new Pagination(criteria, totalCount);
+		
+		result.put("replies", replies);
+		result.put("pagination", pagination);
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, "댓글 조회하기 성공", result), HttpStatus.OK); 
+	}
+	
+	private void checkAuthor(Long rno, UserVO userVO) {
+		
+		log.info("=============== CHECK AUTHOR ===============");
+		log.info("userVO : " + userVO.toString());
+		
+		if(rno == null || userVO == null) {
+			throw new RuntimeException("작성자가 존재하지 않습니다.");
+		}
+		
+		ReplyVO findReplyVO = replyService.getReply(rno);
+		
+		log.info("=============== CHECK AUTHOR ===============");
+		log.info("findReplyVO : " + findReplyVO.toString());
+		
+		if(!findReplyVO.getWriter().equals(userVO.getUsername())) {
+			throw new RuntimeException("작성자 본인만 가능합니다.");
+		}
+		
 	}
 	
 }
