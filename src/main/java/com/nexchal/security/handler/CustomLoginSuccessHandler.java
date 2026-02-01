@@ -43,19 +43,28 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 			log.info("==============" + roleNames + "=================");
 		});
 			
-		// 1-4. 1-2에 저장된 권한 중에 해당 ROLE_ADMIN 권한이 있는지 검사
+		/* 1-4. 1-2에 저장된 권한 중에 해당 ROLE_ADMIN 권한이 있는지 검사
 		if(roleNames.contains(UserEnum.ROLE_ADMIN.toString())) {
 			response.sendRedirect("/sample/admin");
 			return;
 		}
+		*/
 			
-		// 1-5. 1-2에 저장된 권한 중에 해당 ROLE_USER 권한이 있는지 검사
+		/* 1-5. 1-2에 저장된 권한 중에 해당 ROLE_USER 권한이 있는지 검사
 		if(roleNames.contains(UserEnum.ROLE_USER.toString())) {
 			response.sendRedirect("/sample/user");
 			return;
 		}
+		*/
 			
 		log.info("==================================");
+	
+		// 2026-02-01 : 1-4, 1-5 주석 처리하고 로그인 성공시에 관리자 권한 또는 사용자 권한이 있는 사람만  /board/list로 가게 변경.(권한이 없는 사람은 못감)
+		if(roleNames.contains(UserEnum.ROLE_ADMIN.toString()) || roleNames.contains(UserEnum.ROLE_USER.toString())) {
+			response.sendRedirect("/board/list");
+			return;
+		}
+		
 	}
 	
 }

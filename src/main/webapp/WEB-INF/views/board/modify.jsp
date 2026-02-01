@@ -174,7 +174,8 @@
 			
 			let str = '';
 			
-			for (const btn of fileArr) {
+//			for (const btn of fileArr) {  // 2026-02-01 : jsp가 버전이 낮아서 이 방식은 스크립트 오류를 나타낸다.
+			for (var i = 0; i < fileArr.length; i++) {
 				const ano = btn.getAttribute("data-ano");
 				const fullname = btn.getAttribute("data-fullname");
 				
