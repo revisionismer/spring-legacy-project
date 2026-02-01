@@ -384,7 +384,8 @@
 				
 				
 			},
-			error: function(res) {
+			error: function(xhr, status, error) {
+				var res = xhr.responseJSON;
 				console.log(res);
 				
 				alert(res.message);
