@@ -110,6 +110,7 @@ public class ReplyApiController {
 			return new ResponseEntity<>(new ResponseDto<>(-1, "작성자만 삭제가 가능합니다.", errorMap), HttpStatus.FORBIDDEN);  
 		}
 		
+		// 2026-02-07 : 비즈니스 로직을 추가를 안해줘서 삭제 처리가 안되어 추가
 		Map<String, Object> result = new HashMap<>();
 		
 		ReplyVO replyVO = replyService.getReply(rno);
@@ -159,7 +160,18 @@ public class ReplyApiController {
 			return new ResponseEntity<>(new ResponseDto<>(-1, "작성자만 수정이 가능합니다.", errorMap), HttpStatus.FORBIDDEN);  
 		}
 		
-		return new ResponseEntity<>(new ResponseDto<>(1, "댓글 작성하기 성공", null), HttpStatus.OK); 
+		Map<String, Object> result = new HashMap<>();
+		
+		replyVO.setRno(rno);
+		replyVO.setUpdateDate(LocalDateTime.now());
+		
+		replyService.modifyReply(replyVO);
+		
+		ReplyVO updatedReplyVO = replyService.getReply(replyVO.getRno());
+		
+		result.put("replyVO", updatedReplyVO);
+		
+		return new ResponseEntity<>(new ResponseDto<>(1, "댓글 작성하기 성공", result), HttpStatus.OK); 
 	}
 		
 //	@GetMapping("/list/{bno}")
